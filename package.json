@@ -6,6 +6,8 @@
   "author": "Bikash Talukder",
   "type": "module",
   "scripts": {
+    "start": "./start.sh",
+    "stop": "./stop.sh",
     "dev": "vite",
     "build": "tsc && vite build",
     "preview": "vite preview"

@@ -121,24 +121,23 @@ Before starting, ensure you have the following installed on your system:
 
 ---
 
-## 🚀 Quick Start (1-Click Launch)
+## 🚀 2 Simple Commands: Start & Stop
 
-Clone the repository and run the automated turnkey launcher:
+Control the entire application (Voice Server + Web App) with just two commands:
 
+### 1️⃣ Start Swasti:
 ```bash
-git clone https://github.com/bikash-20/LOCAL_LLM_STT_TTS_UI.git
-cd LOCAL_LLM_STT_TTS_UI
-
-# Make start script executable and run
-chmod +x start.sh
 ./start.sh
+# or: npm start
 ```
+*Automatically sets up virtualenv, downloads models if missing, and starts both the Voice Server and Web UI at **[http://localhost:5173](http://localhost:5173)**.*
 
-`start.sh` automatically:
-1. Configures the Python virtual environment and installs minimal dependencies.
-2. Downloads Kokoro-82M ONNX model weights and voice vectors if missing.
-3. Launches the local Voice Server on dual ports `5005` & `5006`.
-4. Starts the Vite web application at **[http://localhost:5173](http://localhost:5173)**.
+### 2️⃣ Stop Swasti:
+```bash
+./stop.sh
+# or: npm stop
+```
+*Cleanly stops all background services and frees ports 5005, 5006, and 5173.*
 
 ---
 

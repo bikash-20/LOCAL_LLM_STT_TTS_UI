@@ -8,6 +8,8 @@ venv/
 dist/
 build/
 .cache/
+logs/
+.swasti.pid
 
 # Large model binaries (>100MB blocked by GitHub)
 models/*.onnx
