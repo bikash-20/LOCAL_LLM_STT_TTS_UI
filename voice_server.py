@@ -43,20 +43,20 @@ kokoro_model = None
 soundfile = None
 
 AVAILABLE_VOICES = [
-    {"id": "af_heart", "name": "Swasti Natural (Default)", "gender": "Female", "accent": "American", "desc": "Warm, ultra-natural, conversational", "recommended": True},
-    {"id": "af_bella", "name": "Swasti Expressive", "gender": "Female", "accent": "American", "desc": "Expressive, clear, friendly"},
-    {"id": "af_nicole", "name": "Swasti Nicole", "gender": "Female", "accent": "American", "desc": "Calm, intelligent, thoughtful"},
-    {"id": "af_sarah", "name": "Swasti Sarah", "gender": "Female", "accent": "American", "desc": "Casual, upbeat, modern"},
-    {"id": "af_sky", "name": "Swasti Sky", "gender": "Female", "accent": "American", "desc": "Gentle, airy, pleasant"},
-    {"id": "am_adam", "name": "Swasti Adam", "gender": "Male", "accent": "American", "desc": "Authoritative, deep, balanced", "recommended": True},
-    {"id": "am_michael", "name": "Swasti Michael", "gender": "Male", "accent": "American", "desc": "Energetic, articulate, engaging"},
-    {"id": "am_eric", "name": "Swasti Eric", "gender": "Male", "accent": "American", "desc": "Relaxed, baritone, natural"},
-    {"id": "am_fenrir", "name": "Swasti Fenrir", "gender": "Male", "accent": "American", "desc": "Deep, powerful, resonant"},
-    {"id": "bf_emma", "name": "Swasti Emma (British)", "gender": "Female", "accent": "British", "desc": "Sophisticated, warm British", "recommended": True},
-    {"id": "bf_isabella", "name": "Swasti Isabella", "gender": "Female", "accent": "British", "desc": "Crisp, elegant, refined"},
-    {"id": "bf_alice", "name": "Swasti Alice", "gender": "Female", "accent": "British", "desc": "Delicate, poised British"},
-    {"id": "bm_george", "name": "Swasti George", "gender": "Male", "accent": "British", "desc": "Distinguished, scholarly British", "recommended": True},
-    {"id": "bm_fable", "name": "Swasti Fable", "gender": "Male", "accent": "British", "desc": "Storyteller, dramatic, resonant"}
+    {"id": "af_heart", "name": "Swasti 🌸 Natural (Default)", "gender": "Female", "accent": "American", "desc": "Warm, ultra-natural, conversational", "recommended": True},
+    {"id": "af_bella", "name": "Swasti 🌸 Expressive", "gender": "Female", "accent": "American", "desc": "Expressive, clear, friendly"},
+    {"id": "af_nicole", "name": "Swasti 🌸 Nicole", "gender": "Female", "accent": "American", "desc": "Calm, intelligent, thoughtful"},
+    {"id": "af_sarah", "name": "Swasti 🌸 Sarah", "gender": "Female", "accent": "American", "desc": "Casual, upbeat, modern"},
+    {"id": "af_sky", "name": "Swasti 🌸 Sky", "gender": "Female", "accent": "American", "desc": "Gentle, airy, pleasant"},
+    {"id": "am_adam", "name": "Swasti 🌸 Adam", "gender": "Male", "accent": "American", "desc": "Authoritative, deep, balanced", "recommended": True},
+    {"id": "am_michael", "name": "Swasti 🌸 Michael", "gender": "Male", "accent": "American", "desc": "Energetic, articulate, engaging"},
+    {"id": "am_eric", "name": "Swasti 🌸 Eric", "gender": "Male", "accent": "American", "desc": "Relaxed, baritone, natural"},
+    {"id": "am_fenrir", "name": "Swasti 🌸 Fenrir", "gender": "Male", "accent": "American", "desc": "Deep, powerful, resonant"},
+    {"id": "bf_emma", "name": "Swasti 🌸 Emma (British)", "gender": "Female", "accent": "British", "desc": "Sophisticated, warm British", "recommended": True},
+    {"id": "bf_isabella", "name": "Swasti 🌸 Isabella", "gender": "Female", "accent": "British", "desc": "Crisp, elegant, refined"},
+    {"id": "bf_alice", "name": "Swasti 🌸 Alice", "gender": "Female", "accent": "British", "desc": "Delicate, poised British"},
+    {"id": "bm_george", "name": "Swasti 🌸 George", "gender": "Male", "accent": "British", "desc": "Distinguished, scholarly British", "recommended": True},
+    {"id": "bm_fable", "name": "Swasti 🌸 Fable", "gender": "Male", "accent": "British", "desc": "Storyteller, dramatic, resonant"}
 ]
 
 def download_kokoro_if_needed():

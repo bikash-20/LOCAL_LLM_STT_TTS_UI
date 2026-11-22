@@ -1,8 +1,8 @@
-# 🌸 Swasti — 100% Private Offline AI Voice & Chat Companion
+# Swasti 🌸 — 100% Private Offline AI Voice & Chat Companion
 
 <div align="center">
 
-![Swasti Banner](public/favicon.svg)
+![Swasti 🌸 Banner](public/favicon.svg)
 
 ### **Created & Developed by Bikash Talukder**
 
@@ -23,7 +23,7 @@
 
 ## 🌟 Overview
 
-**Swasti** is designed from the ground up for individuals who demand complete privacy, uncompromising speed, and lifelike natural human voice interactions without sending a single byte of audio or chat data to external servers.
+**Swasti 🌸** is designed from the ground up for individuals who demand complete privacy, uncompromising speed, and lifelike natural human voice interactions without sending a single byte of audio or chat data to external servers.
 
 Running entirely on your local machine (macOS / Linux / Windows):
 1. **Local LLM Engine**: Connects directly to [Ollama](https://ollama.ai) (`http://localhost:11434` or local network LAN IP) with streaming responses.
@@ -35,15 +35,15 @@ Running entirely on your local machine (macOS / Linux / Windows):
 
 ## ✨ Core Features
 
-### 👩‍💼 Personal Persona — Swasti
+### 👩‍💼 Personal Persona — Swasti 🌸
 - Configured with a dedicated identity: intelligent, elegant, articulate, and thoughtful.
 - Proudly acknowledges its creator: **Bikash Talukder**.
 - Answers with structured explanations, LaTeX derivations, and clear formatting.
 
 ### 🎙️ Ultra-Realistic Voice & Interactive Voice Mode
-- **14+ Voice Profiles**: From warm conversational American (*Swasti Natural* / `af_heart`) to refined British accents (*Swasti Emma* / `bf_emma`) and deep baritones (*Swasti Adam* / `am_adam`).
+- **14+ Voice Profiles**: From warm conversational American (*Swasti 🌸 Natural* / `af_heart`) to refined British accents (*Swasti 🌸 Emma* / `bf_emma`) and deep baritones (*Swasti 🌸 Adam* / `am_adam`).
 - **Interactive Voice Mode**: Fullscreen modal with a dynamic audio visualizer orb reacting live to microphone input and speech frequencies.
-- **Natural Voice Interruption**: Start speaking at any time to automatically pause Swasti's speech output.
+- **Natural Voice Interruption**: Start speaking at any time to automatically pause Swasti 🌸's speech output.
 
 ### ⚡ Smooth Word-by-Word Streaming Animation
 - 60fps token queue ensures responses flow steadily and comfortably onto the screen without jarring bulk text dumps.
@@ -125,14 +125,14 @@ Before starting, ensure you have the following installed on your system:
 
 Control the entire application (Voice Server + Web App) with just two commands:
 
-### 1️⃣ Start Swasti:
+### 1️⃣ Start Swasti 🌸:
 ```bash
 ./start.sh
 # or: npm start
 ```
 *Automatically sets up virtualenv, downloads models if missing, and starts both the Voice Server and Web UI at **[http://localhost:5173](http://localhost:5173)**.*
 
-### 2️⃣ Stop Swasti:
+### 2️⃣ Stop Swasti 🌸:
 ```bash
 ./stop.sh
 # or: npm stop
@@ -193,17 +193,17 @@ Visit **http://localhost:5173** in Google Chrome or any modern browser.
 | Shortcut | Action |
 | :--- | :--- |
 | <kbd>⌘K</kbd> / <kbd>Ctrl+K</kbd> | Open a brand new conversation |
-| <kbd>Enter</kbd> | Send current prompt to Swasti |
+| <kbd>Enter</kbd> | Send current prompt to Swasti 🌸 |
 | <kbd>Shift + Enter</kbd> | Insert a newline into the message input box |
 
 ---
 
 ## 📱 Progressive Web App (PWA)
 
-Swasti is fully installable as an offline Progressive Web App:
+Swasti 🌸 is fully installable as an offline Progressive Web App:
 - Open in Google Chrome, Edge, or Safari.
 - Click the **Install** button in your browser address bar.
-- Launch Swasti as a standalone desktop or mobile application.
+- Launch Swasti 🌸 as a standalone desktop or mobile application.
 
 ---
 

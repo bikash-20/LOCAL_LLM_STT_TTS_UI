@@ -92,7 +92,7 @@ export function App() {
       role: 'assistant',
       content: '',
       timestamp: Date.now() + 1,
-      model: 'Swasti'
+      model: 'Swasti 🌸'
     };
 
     addMessage(activeSession.id, assistantMessage);
@@ -279,7 +279,7 @@ export function App() {
               role: 'assistant',
               content: text,
               timestamp: Date.now(),
-              model: 'Swasti'
+              model: 'Swasti 🌸'
             });
           }
         }}

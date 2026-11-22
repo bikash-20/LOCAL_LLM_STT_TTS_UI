@@ -71,7 +71,7 @@ export const VoiceModeModal: React.FC<VoiceModeModalProps> = ({
     
     const transcribedText = await stt.stopRecording();
     if (!transcribedText || !transcribedText.trim()) {
-      setSubtitle('No speech detected. Tap microphone to speak to Swasti.');
+      setSubtitle('No speech detected. Tap microphone to speak to Swasti 🌸.');
       setVoiceState('idle');
       return;
     }
@@ -91,7 +91,7 @@ export const VoiceModeModal: React.FC<VoiceModeModalProps> = ({
         }
       ];
 
-      setSubtitle('Swasti is thinking...');
+      setSubtitle('Swasti 🌸 is thinking...');
       let fullResponse = '';
       await ollama.generateStreamingResponse(historyContext, undefined, (chunk) => {
         fullResponse += chunk;
@@ -100,7 +100,7 @@ export const VoiceModeModal: React.FC<VoiceModeModalProps> = ({
 
       if (fullResponse.trim()) {
         onAddAssistantMessage(fullResponse);
-        setSubtitle('Swasti Speaking...');
+        setSubtitle('Swasti 🌸 Speaking...');
         await tts.speak(fullResponse);
       }
     } catch (err) {
@@ -145,7 +145,7 @@ export const VoiceModeModal: React.FC<VoiceModeModalProps> = ({
           </div>
           <div>
             <h2 className="text-xl sm:text-2xl font-bold font-sans flex items-center gap-2">
-              <span>Swasti Voice Companion</span>
+              <span>Swasti 🌸 Voice Companion</span>
               <span
                 className="px-2.5 py-0.5 rounded-full text-[11px] uppercase font-bold border"
                 style={{
@@ -170,7 +170,7 @@ export const VoiceModeModal: React.FC<VoiceModeModalProps> = ({
             onClose();
           }}
           className="p-2.5 rounded-xl bg-[#1A1B28] text-[#A0A2B8] hover:text-[#F7F5EF] hover:bg-[#25273C] border border-[#2B2D40] transition-colors"
-          title="Exit Swasti voice mode"
+          title="Exit Swasti 🌸 voice mode"
         >
           <X className="w-5 h-5" />
         </button>
@@ -190,25 +190,25 @@ export const VoiceModeModal: React.FC<VoiceModeModalProps> = ({
             {voiceState === 'listening' && (
               <>
                 <span className="w-2.5 h-2.5 rounded-full animate-ping" style={{ backgroundColor: 'var(--c3)' }} />
-                <span style={{ color: 'var(--c3)' }}>Swasti is listening...</span>
+                <span style={{ color: 'var(--c3)' }}>Swasti 🌸 is listening...</span>
               </>
             )}
             {voiceState === 'thinking' && (
               <>
                 <span className="w-2.5 h-2.5 rounded-full animate-pulse" style={{ backgroundColor: 'var(--c1)' }} />
-                <span style={{ color: 'var(--c1)' }}>Swasti is thinking...</span>
+                <span style={{ color: 'var(--c1)' }}>Swasti 🌸 is thinking...</span>
               </>
             )}
             {voiceState === 'speaking' && (
               <>
                 <Volume2 className="w-4.5 h-4.5 animate-pulse" style={{ color: 'var(--c1)' }} />
-                <span style={{ color: 'var(--c1)' }}>Swasti Speaking...</span>
+                <span style={{ color: 'var(--c1)' }}>Swasti 🌸 Speaking...</span>
               </>
             )}
             {voiceState === 'idle' && (
               <>
                 <span className="w-2.5 h-2.5 rounded-full bg-[#6C6E84]" />
-                <span className="text-[#A0A2B8]">Ready • Tap microphone to speak to Swasti</span>
+                <span className="text-[#A0A2B8]">Ready • Tap microphone to speak to Swasti 🌸</span>
               </>
             )}
           </div>
@@ -230,7 +230,7 @@ export const VoiceModeModal: React.FC<VoiceModeModalProps> = ({
             <button
               onClick={handleInterrupt}
               className="px-5 py-3 rounded-full bg-[#24263A] hover:bg-[#2F324C] text-[#F7F5EF] border border-[#3C3F5E] flex items-center gap-2 text-[13.5px] font-bold transition-all shadow-md"
-              title="Interrupt Swasti"
+              title="Interrupt Swasti 🌸"
             >
               <Square className="w-4 h-4 fill-current" style={{ color: 'var(--c3)' }} />
               <span>Interrupt</span>
@@ -244,7 +244,7 @@ export const VoiceModeModal: React.FC<VoiceModeModalProps> = ({
             style={{
               backgroundColor: stt.isRecording ? 'var(--c3)' : 'var(--c1)'
             }}
-            title={stt.isRecording ? 'Stop & Send' : 'Speak to Swasti'}
+            title={stt.isRecording ? 'Stop & Send' : 'Speak to Swasti 🌸'}
           >
             {stt.isRecording ? (
               <MicOff className="w-7 h-7" />
@@ -256,7 +256,7 @@ export const VoiceModeModal: React.FC<VoiceModeModalProps> = ({
 
         <p className="text-[12.5px] text-[#8E90A6] flex items-center gap-1.5 font-medium">
           <Heart className="w-3.5 h-3.5 text-[#E8412C] fill-current" />
-          <span>Swasti • Created by Bikash Talukder</span>
+          <span>Swasti 🌸 • Created by Bikash Talukder</span>
         </p>
       </div>
     </div>

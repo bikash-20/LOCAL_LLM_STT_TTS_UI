@@ -1,12 +1,12 @@
 #!/usr/bin/env bash
-# Swasti AI — Service Stop Script
+# Swasti 🌸 AI — Service Stop Script
 # Created by Bikash Talukder
 
 SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
 cd "$SCRIPT_DIR"
 
 echo "=========================================================="
-echo "    Stopping Swasti AI Services...                        "
+echo "    Stopping Swasti 🌸 AI Services...                     "
 echo "=========================================================="
 
 STOPPED=0
@@ -49,7 +49,7 @@ done
 if [ "$STOPPED" -eq 1 ]; then
   echo "✓ Voice Server stopped (ports 5005, 5006)"
   echo "✓ Web UI stopped (port 5173)"
-  echo " Swasti services stopped successfully."
+  echo " Swasti 🌸 services stopped successfully."
 else
-  echo " No active Swasti services were running."
+  echo " No active Swasti 🌸 services were running."
 fi

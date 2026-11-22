@@ -81,7 +81,7 @@ export const MessageItem: React.FC<MessageItemProps> = ({
           <div className="flex items-center justify-between mb-2">
             <div className="flex items-center gap-2.5">
               <span className="font-extrabold text-[17px] sm:text-[18px] tracking-tight" style={{ color: 'var(--text-primary)' }}>
-                {isUser ? 'You' : 'Swasti'}
+                {isUser ? 'You' : 'Swasti 🌸'}
               </span>
               <span className="text-[13px] font-medium" style={{ color: 'var(--text-muted)' }}>
                 {timeStr}
@@ -102,7 +102,7 @@ export const MessageItem: React.FC<MessageItemProps> = ({
                       borderColor: isPlayingThis ? 'var(--c3)' : 'var(--border-color)',
                       color: isPlayingThis ? '#FFFFFF' : 'var(--text-secondary)'
                     }}
-                    title={isPlayingThis ? 'Stop Swasti voice playback' : 'Listen with Swasti Voice'}
+                    title={isPlayingThis ? 'Stop Swasti 🌸 voice playback' : 'Listen with Swasti 🌸 Voice'}
                   >
                     {isSynthesizingThis ? (
                       <>
@@ -122,7 +122,7 @@ export const MessageItem: React.FC<MessageItemProps> = ({
                     ) : (
                       <>
                         <Volume2 className="w-4 h-4" style={{ color: 'var(--c1)' }} />
-                        <span>Swasti Voice</span>
+                        <span>Swasti 🌸 Voice</span>
                       </>
                     )}
                   </button>

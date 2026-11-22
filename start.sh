@@ -1,5 +1,5 @@
 #!/usr/bin/env bash
-# Swasti AI — 1-Click Launch Script
+# Swasti 🌸 AI — 1-Click Launch Script
 # Created & Developed by Bikash Talukder
 
 set -e
@@ -10,7 +10,7 @@ cd "$SCRIPT_DIR"
 mkdir -p logs models
 
 echo "=========================================================="
-echo "    Swasti — Offline AI Voice & Chat Companion            "
+echo "    Swasti 🌸 — Offline AI Voice & Chat Companion          "
 echo "            Created by Bikash Talukder                    "
 echo "=========================================================="
 
@@ -66,20 +66,20 @@ done
 
 echo ""
 echo "=========================================================="
-echo "  🎉 Swasti is LIVE and running offline!"
+echo "  🎉 Swasti 🌸 is LIVE and running offline!"
 echo "=========================================================="
 echo "  🌐 Web App:      http://localhost:5173"
 echo "  🎙️ Voice Server: http://localhost:5005 & http://localhost:5006"
 echo "  📑 Logs:         logs/web.log & logs/voice.log"
 echo "----------------------------------------------------------"
-echo "  🛑 To stop Swasti anytime, run:"
+echo "  🛑 To stop Swasti 🌸 anytime, run:"
 echo "     ./stop.sh"
 echo "=========================================================="
 echo ""
 
 # Optional: if foreground mode requested with -f or --foreground, tail logs
 if [ "$1" = "-f" ] || [ "$1" = "--foreground" ]; then
-  echo "Streaming logs (press Ctrl+C to stop Swasti)..."
+  echo "Streaming logs (press Ctrl+C to stop Swasti 🌸)..."
   cleanup() {
     ./stop.sh
     exit 0

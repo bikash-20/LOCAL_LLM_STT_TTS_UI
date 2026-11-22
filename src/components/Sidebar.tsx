@@ -256,7 +256,7 @@ export const Sidebar: React.FC<SidebarProps> = ({
                 </div>
                 <div>
                   <h1 className="text-lg font-black tracking-tight font-sans flex items-center gap-1.5" style={{ color: 'var(--text-primary)' }}>
-                    <span>Swasti</span>
+                    <span>Swasti 🌸</span>
                     <span className="w-2 h-2 rounded-full" style={{ backgroundColor: 'var(--c1)' }} />
                   </h1>
                   <p className="text-[12px] font-semibold" style={{ color: 'var(--text-muted)' }}>
@@ -349,7 +349,7 @@ export const Sidebar: React.FC<SidebarProps> = ({
                   }}
                 />
                 <span className="truncate text-[12.5px] font-bold" style={{ color: 'var(--text-secondary)' }}>
-                  Swasti Online
+                  Swasti 🌸 Online
                 </span>
               </div>
 
@@ -361,7 +361,7 @@ export const Sidebar: React.FC<SidebarProps> = ({
                   borderColor: 'var(--c1)',
                   color: 'var(--c1)'
                 }}
-                title="Launch Swasti Fullscreen Voice Mode"
+                title="Launch Swasti 🌸 Fullscreen Voice Mode"
               >
                 <Mic className="w-3.5 h-3.5" style={{ color: 'var(--c3)' }} />
                 <span>Voice</span>

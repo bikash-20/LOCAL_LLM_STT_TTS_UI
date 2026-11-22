@@ -114,7 +114,7 @@ export const ChatArea: React.FC<ChatAreaProps> = ({
   const quickPrompts = [
     {
       title: 'Who Made You?',
-      desc: 'Ask Swasti about her creator Bikash Talukder',
+      desc: 'Ask Swasti 🌸 about her creator Bikash Talukder',
       icon: Heart,
       prompt: 'Who created and developed you?'
     },
@@ -164,7 +164,7 @@ export const ChatArea: React.FC<ChatAreaProps> = ({
               <span>{session.title}</span>
             </h2>
             <div className="flex items-center gap-2 text-[13.5px] sm:text-[14.5px]" style={{ color: 'var(--text-muted)' }}>
-              <span className="font-bold" style={{ color: 'var(--c1)' }}>Swasti</span>
+              <span className="font-bold" style={{ color: 'var(--c1)' }}>Swasti 🌸</span>
               <span>•</span>
               <span>Created by <strong className="font-bold" style={{ color: 'var(--text-secondary)' }}>Bikash Talukder</strong></span>
             </div>
@@ -182,10 +182,10 @@ export const ChatArea: React.FC<ChatAreaProps> = ({
               borderColor: 'var(--c1)',
               color: 'var(--c1)'
             }}
-            title="Open Interactive Swasti Voice Mode"
+            title="Open Interactive Swasti 🌸 Voice Mode"
           >
             <Radio className="w-4 h-4" style={{ color: 'var(--c3)' }} />
-            <span className="hidden sm:inline">Swasti Voice</span>
+            <span className="hidden sm:inline">Swasti 🌸 Voice</span>
           </button>
 
           {/* Export Chat */}
@@ -225,7 +225,7 @@ export const ChatArea: React.FC<ChatAreaProps> = ({
             </div>
 
             <h1 className="text-4xl sm:text-6xl font-black font-sans tracking-tight" style={{ color: 'var(--text-primary)' }}>
-              Swasti
+              Swasti 🌸
             </h1>
             <p className="mt-2 text-lg sm:text-xl font-bold tracking-wide" style={{ color: 'var(--c1)' }}>
               Voice & Chat Companion
@@ -296,7 +296,7 @@ export const ChatArea: React.FC<ChatAreaProps> = ({
             >
               <div className="flex items-center gap-2">
                 <span className="w-2.5 h-2.5 rounded-full animate-ping" style={{ backgroundColor: 'var(--c3)' }} />
-                <span>Swasti is listening to your speech... Speak naturally</span>
+                <span>Swasti 🌸 is listening to your speech... Speak naturally</span>
               </div>
               <button
                 onClick={handleStopMic}
@@ -326,7 +326,7 @@ export const ChatArea: React.FC<ChatAreaProps> = ({
                 backgroundColor: stt.isRecording ? 'var(--c3)' : 'transparent',
                 color: stt.isRecording ? '#FFFFFF' : 'var(--text-secondary)'
               }}
-              title={stt.isRecording ? 'Stop recording' : 'Speak to Swasti (Whisper STT)'}
+              title={stt.isRecording ? 'Stop recording' : 'Speak to Swasti 🌸 (Whisper STT)'}
             >
               {stt.isRecording ? <MicOff className="w-5 h-5" /> : <Mic className="w-5 h-5" />}
             </button>
@@ -337,7 +337,7 @@ export const ChatArea: React.FC<ChatAreaProps> = ({
               value={inputText}
               onChange={(e) => setInputText(e.target.value)}
               onKeyDown={handleKeyDown}
-              placeholder={stt.isRecording ? 'Listening...' : 'Message Swasti or click mic to speak... (LaTeX, tables, code supported)'}
+              placeholder={stt.isRecording ? 'Listening...' : 'Message Swasti 🌸 or click mic to speak... (LaTeX, tables, code supported)'}
               rows={1}
               className="flex-1 max-h-48 py-2 bg-transparent focus:outline-none text-[17px] sm:text-[17.5px] resize-none leading-relaxed font-sans"
               style={{
@@ -368,7 +368,7 @@ export const ChatArea: React.FC<ChatAreaProps> = ({
                   backgroundColor: inputText.trim() ? 'var(--c1)' : 'var(--card-bg)',
                   color: inputText.trim() ? '#FFFFFF' : 'var(--text-muted)'
                 }}
-                title="Send message to Swasti"
+                title="Send message to Swasti 🌸"
               >
                 <Send className="w-5 h-5" />
               </button>
@@ -378,7 +378,7 @@ export const ChatArea: React.FC<ChatAreaProps> = ({
           <div className="flex items-center justify-between mt-2.5 px-1 text-[13px] sm:text-[13.5px]" style={{ color: 'var(--text-muted)' }}>
             <span>Press <kbd className="px-1.5 py-0.5 rounded border text-[12px] font-mono" style={{ borderColor: 'var(--border-color)', backgroundColor: 'var(--card-bg)', color: 'var(--text-secondary)' }}>Enter</kbd> to send, <kbd className="px-1.5 py-0.5 rounded border text-[12px] font-mono" style={{ borderColor: 'var(--border-color)', backgroundColor: 'var(--card-bg)', color: 'var(--text-secondary)' }}>Shift+Enter</kbd> for newline</span>
             <span className="font-bold flex items-center gap-1.5" style={{ color: 'var(--c1)' }}>
-              <span>Swasti</span> • <span>Bikash Talukder</span>
+              <span>Swasti 🌸</span> • <span>Bikash Talukder</span>
             </span>
           </div>
         </div>

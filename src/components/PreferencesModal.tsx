@@ -20,17 +20,17 @@ interface PreferencesModalProps {
 }
 
 const SWASTI_VOICE_PROFILES: VoiceOption[] = [
-  { id: 'af_heart', name: 'Swasti Natural (Recommended)', gender: 'Female', accent: 'American', desc: 'Warm, ultra-natural, human-like cadence', recommended: true },
-  { id: 'af_bella', name: 'Swasti Expressive', gender: 'Female', accent: 'American', desc: 'Clear, lively, friendly' },
-  { id: 'af_nicole', name: 'Swasti Thoughtful', gender: 'Female', accent: 'American', desc: 'Calm, poised, intelligent' },
-  { id: 'af_sarah', name: 'Swasti Modern', gender: 'Female', accent: 'American', desc: 'Casual, upbeat, modern' },
-  { id: 'af_sky', name: 'Swasti Gentle', gender: 'Female', accent: 'American', desc: 'Airy, soft, pleasant' },
-  { id: 'bf_emma', name: 'Swasti British Warm (Recommended)', gender: 'Female', accent: 'British', desc: 'Sophisticated, warm British accent', recommended: true },
-  { id: 'bf_isabella', name: 'Swasti British Crisp', gender: 'Female', accent: 'British', desc: 'Crisp, elegant, refined' },
-  { id: 'bf_alice', name: 'Swasti British Delicate', gender: 'Female', accent: 'British', desc: 'Delicate, poised' },
-  { id: 'am_adam', name: 'Swasti Baritone (Deep)', gender: 'Male', accent: 'American', desc: 'Authoritative, deep, balanced', recommended: true },
-  { id: 'am_michael', name: 'Swasti Articulate', gender: 'Male', accent: 'American', desc: 'Energetic, articulate, engaging' },
-  { id: 'bm_george', name: 'Swasti Distinguished', gender: 'Male', accent: 'British', desc: 'Scholarly, distinguished British' }
+  { id: 'af_heart', name: 'Swasti 🌸 Natural (Recommended)', gender: 'Female', accent: 'American', desc: 'Warm, ultra-natural, human-like cadence', recommended: true },
+  { id: 'af_bella', name: 'Swasti 🌸 Expressive', gender: 'Female', accent: 'American', desc: 'Clear, lively, friendly' },
+  { id: 'af_nicole', name: 'Swasti 🌸 Thoughtful', gender: 'Female', accent: 'American', desc: 'Calm, poised, intelligent' },
+  { id: 'af_sarah', name: 'Swasti 🌸 Modern', gender: 'Female', accent: 'American', desc: 'Casual, upbeat, modern' },
+  { id: 'af_sky', name: 'Swasti 🌸 Gentle', gender: 'Female', accent: 'American', desc: 'Airy, soft, pleasant' },
+  { id: 'bf_emma', name: 'Swasti 🌸 British Warm (Recommended)', gender: 'Female', accent: 'British', desc: 'Sophisticated, warm British accent', recommended: true },
+  { id: 'bf_isabella', name: 'Swasti 🌸 British Crisp', gender: 'Female', accent: 'British', desc: 'Crisp, elegant, refined' },
+  { id: 'bf_alice', name: 'Swasti 🌸 British Delicate', gender: 'Female', accent: 'British', desc: 'Delicate, poised' },
+  { id: 'am_adam', name: 'Swasti 🌸 Baritone (Deep)', gender: 'Male', accent: 'American', desc: 'Authoritative, deep, balanced', recommended: true },
+  { id: 'am_michael', name: 'Swasti 🌸 Articulate', gender: 'Male', accent: 'American', desc: 'Energetic, articulate, engaging' },
+  { id: 'bm_george', name: 'Swasti 🌸 Distinguished', gender: 'Male', accent: 'British', desc: 'Scholarly, distinguished British' }
 ];
 
 export const PreferencesModal: React.FC<PreferencesModalProps> = ({
@@ -121,7 +121,7 @@ export const PreferencesModal: React.FC<PreferencesModalProps> = ({
       const data = await res.json();
       setVoiceTestResult({
         success: true,
-        msg: `Swasti voice server online! TTS: ${data.tts?.ready ? 'Ready' : 'Standby'}, Whisper STT: ${data.stt?.ready ? 'Ready' : 'Standby'}`
+        msg: `Swasti 🌸 voice server online! TTS: ${data.tts?.ready ? 'Ready' : 'Standby'}, Whisper STT: ${data.stt?.ready ? 'Ready' : 'Standby'}`
       });
     } catch (err) {
       setVoiceTestResult({
@@ -214,7 +214,7 @@ export const PreferencesModal: React.FC<PreferencesModalProps> = ({
             style={{ color: activeTab === 'voice' ? 'var(--c1)' : 'var(--text-muted)' }}
           >
             <Volume2 className="w-4.5 h-4.5" />
-            <span>Swasti Voice</span>
+            <span>Swasti 🌸 Voice</span>
           </button>
 
           <button
@@ -360,7 +360,7 @@ export const PreferencesModal: React.FC<PreferencesModalProps> = ({
               <div>
                 <div className="flex items-center justify-between mb-2">
                   <label className="text-[13px] font-bold uppercase tracking-wider" style={{ color: 'var(--text-muted)' }}>
-                    Swasti Persona & Knowledge System Prompt
+                    Swasti 🌸 Persona & Knowledge System Prompt
                   </label>
                   <button
                     type="button"
@@ -368,7 +368,7 @@ export const PreferencesModal: React.FC<PreferencesModalProps> = ({
                     className="text-[13px] font-bold underline hover:opacity-80"
                     style={{ color: 'var(--c1)' }}
                   >
-                    Reset to Swasti Default
+                    Reset to Swasti 🌸 Default
                   </button>
                 </div>
                 <textarea
@@ -391,7 +391,7 @@ export const PreferencesModal: React.FC<PreferencesModalProps> = ({
             <div className="space-y-4">
               <div>
                 <label className="block text-[13px] font-bold uppercase tracking-wider mb-2" style={{ color: 'var(--text-muted)' }}>
-                  Swasti Voice (STT) Endpoint
+                  Swasti 🌸 Voice (STT) Endpoint
                 </label>
                 <input
                   type="text"
@@ -409,7 +409,7 @@ export const PreferencesModal: React.FC<PreferencesModalProps> = ({
 
               <div>
                 <label className="block text-[13px] font-bold uppercase tracking-wider mb-2" style={{ color: 'var(--text-muted)' }}>
-                  Swasti Voice (TTS) Endpoint
+                  Swasti 🌸 Voice (TTS) Endpoint
                 </label>
                 <input
                   type="text"
@@ -440,7 +440,7 @@ export const PreferencesModal: React.FC<PreferencesModalProps> = ({
                     }}
                   >
                     {testingVoice && <RefreshCw className="w-4 h-4 animate-spin" />}
-                    <span>Test Swasti Voice Server</span>
+                    <span>Test Swasti 🌸 Voice Server</span>
                   </button>
                 </div>
 
@@ -461,7 +461,7 @@ export const PreferencesModal: React.FC<PreferencesModalProps> = ({
               {/* Swasti Voice Profiles */}
               <div>
                 <label className="block text-[13px] font-bold uppercase tracking-wider mb-2" style={{ color: 'var(--text-muted)' }}>
-                  Swasti Voice Profile
+                  Swasti 🌸 Voice Profile
                 </label>
                 <select
                   value={voiceId}
@@ -503,7 +503,7 @@ export const PreferencesModal: React.FC<PreferencesModalProps> = ({
               {/* Toggles */}
               <div className="pt-3 border-t space-y-3.5" style={{ borderColor: 'var(--border-color)' }}>
                 <label className="flex items-center justify-between cursor-pointer">
-                  <span className="text-[14px] font-medium" style={{ color: 'var(--text-primary)' }}>Auto-read Swasti responses aloud</span>
+                  <span className="text-[14px] font-medium" style={{ color: 'var(--text-primary)' }}>Auto-read Swasti 🌸 responses aloud</span>
                   <input
                     type="checkbox"
                     checked={autoSpeak}
@@ -516,7 +516,7 @@ export const PreferencesModal: React.FC<PreferencesModalProps> = ({
                 <label className="flex items-center justify-between cursor-pointer">
                   <div>
                     <span className="text-[14px] font-medium block" style={{ color: 'var(--text-primary)' }}>Voice Interruption</span>
-                    <span className="text-[12.5px]" style={{ color: 'var(--text-muted)' }}>Speaking will immediately pause Swasti playback</span>
+                    <span className="text-[12.5px]" style={{ color: 'var(--text-muted)' }}>Speaking will immediately pause Swasti 🌸 playback</span>
                   </div>
                   <input
                     type="checkbox"
