@@ -96,7 +96,8 @@ export function useOllama(config: OllamaConfig) {
     setError(null);
     setIsGenerating(true);
 
-    const activeModel = modelOverride || config.selectedModel || availableModels[0];
+    const isModelValid = !!config.selectedModel && availableModels.includes(config.selectedModel);
+    const activeModel = modelOverride || (isModelValid ? config.selectedModel : availableModels[0]);
     if (!activeModel) {
       setIsGenerating(false);
       const errText = 'No Ollama model selected. Please select a model in Preferences.';
@@ -173,8 +174,8 @@ export function useOllama(config: OllamaConfig) {
         for (const line of lines) {
           try {
             const parsed = JSON.parse(line);
-            if (parsed.message?.content) {
-              const delta = parsed.message.content;
+            const delta = parsed.message?.content ?? parsed.response ?? '';
+            if (delta) {
               fullText += delta;
               onChunk?.(delta);
             }

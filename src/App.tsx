@@ -200,7 +200,11 @@ export function App() {
         onCloseMobile={() => setIsSidebarOpen(false)}
         onToggleCollapse={() => setIsSidebarOpen(prev => !prev)}
         ollamaConnected={ollama.isConnected}
-        activeModel={ollamaConfig.selectedModel || ollama.availableModels[0] || ''}
+        activeModel={
+          (ollamaConfig.selectedModel && ollama.availableModels.includes(ollamaConfig.selectedModel))
+            ? ollamaConfig.selectedModel
+            : (ollama.availableModels[0] || '')
+        }
       />
 
       {/* Main Chat View */}

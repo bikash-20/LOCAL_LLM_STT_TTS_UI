@@ -74,7 +74,10 @@ export const PreferencesModal: React.FC<PreferencesModalProps> = ({
   useEffect(() => {
     if (isOpen) {
       setOllamaUrl(ollamaConfig.serverUrl);
-      setSelectedModel(ollamaConfig.selectedModel || availableModels[0] || '');
+      const validModel = (ollamaConfig.selectedModel && availableModels.includes(ollamaConfig.selectedModel))
+        ? ollamaConfig.selectedModel
+        : (availableModels[0] || '');
+      setSelectedModel(validModel);
       setTemperature(ollamaConfig.temperature);
       setSystemPrompt(ollamaConfig.systemPrompt || SWASTI_SYSTEM_PROMPT);
       setSttEndpoint(voiceConfig.sttEndpoint);
