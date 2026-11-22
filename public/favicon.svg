@@ -1,0 +1,24 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100" width="100" height="100">
+  <defs>
+    <linearGradient id="grad" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#9CAF88" />
+      <stop offset="50%" stop-color="#83976f" />
+      <stop offset="100%" stop-color="#E8412C" />
+    </linearGradient>
+    <filter id="glow" x="-20%" y="-20%" width="140%" height="140%">
+      <feGaussianBlur stdDeviation="3" result="blur" />
+      <feComposite in="SourceGraphic" in2="blur" operator="over" />
+    </filter>
+  </defs>
+  <rect width="100" height="100" rx="24" fill="#161724" />
+  <circle cx="50" cy="50" r="32" fill="url(#grad)" opacity="0.15" />
+  <g filter="url(#glow)">
+    <!-- Audio Waveform bars -->
+    <rect x="24" y="42" width="6" height="16" rx="3" fill="#9CAF88" />
+    <rect x="34" y="30" width="6" height="40" rx="3" fill="#9CAF88" />
+    <rect x="44" y="20" width="6" height="60" rx="3" fill="#F7F5EF" />
+    <rect x="54" y="26" width="6" height="48" rx="3" fill="#9CAF88" />
+    <rect x="64" y="38" width="6" height="24" rx="3" fill="#E8412C" />
+  </g>
+  <circle cx="76" cy="24" r="4" fill="#E8412C" />
+</svg>

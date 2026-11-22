@@ -1,0 +1,160 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+  :root {
+    --app-bg: #11121A;
+    --sidebar-bg: #151624;
+    --header-bg: rgba(20, 21, 34, 0.92);
+    --card-bg: #1A1C2C;
+    --ai-msg-bg: #161726;
+    --border-color: #27293D;
+    --input-bg: #181A2A;
+    --text-primary: #F7F5EF;
+    --text-secondary: #A0A2B8;
+    --text-muted: #6C6E84;
+
+    --c1: #9CAF88; /* Primary Accent (Sage) */
+    --c2: #F7F5EF; /* Base / Light BG (Off-White) */
+    --c3: #E8412C; /* Action & Mic (Tomato Red) */
+  }
+
+  /* Custom Scrollbar */
+  ::-webkit-scrollbar {
+    width: 6px;
+    height: 6px;
+  }
+
+  ::-webkit-scrollbar-track {
+    background: transparent;
+  }
+
+  ::-webkit-scrollbar-thumb {
+    background: rgba(120, 125, 150, 0.25);
+    border-radius: 9999px;
+  }
+
+  ::-webkit-scrollbar-thumb:hover {
+    background: rgba(120, 125, 150, 0.45);
+  }
+}
+
+/* Dynamic Surfaces bound to CSS variables */
+body {
+  background-color: var(--app-bg);
+  color: var(--text-primary);
+  font-family: 'Plus Jakarta Sans', 'Urbanist', 'Outfit', 'Sora', -apple-system, sans-serif;
+  letter-spacing: -0.015em;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  transition: background-color 0.2s ease, color 0.2s ease;
+}
+
+
+/* ====================================================
+   VIBRANT SYNTAX HIGHLIGHTING (Prism.js Theme)
+   Vivid, colorful code tokens for C++, Python, JS, etc.
+   ==================================================== */
+.code-highlighted {
+  color: #E6EDF3;
+  text-shadow: none;
+}
+
+/* Keywords, Preprocessor (#include, return, int, if, while) */
+.token.keyword,
+.token.directive.keyword,
+.token.macro.property,
+.token.directive-hash {
+  color: #FF7B72 !important; /* Vivid Coral / Pink-Red */
+  font-weight: 600;
+}
+
+/* Strings, Characters, Header Names (<iostream>, "Hello") */
+.token.string,
+.token.char,
+.token.attr-value {
+  color: #7EE787 !important; /* Fresh Vivid Spring Green */
+}
+
+/* Functions, Methods, Macro Names (main, printf, cout, push) */
+.token.function,
+.token.method,
+.token.function-variable {
+  color: #79C0FF !important; /* Vibrant Sky Blue */
+  font-weight: 500;
+}
+
+/* Types, Builtins, Classes (std, vector, int, float, string) */
+.token.class-name,
+.token.builtin,
+.token.type-hint,
+.token.namespace {
+  color: #FFA657 !important; /* Golden Orange */
+}
+
+/* Numbers, Booleans, Constants (0, 100, true, null) */
+.token.number,
+.token.boolean,
+.token.constant {
+  color: #F8B449 !important; /* Bright Amber */
+}
+
+/* Operators (<<, >>, +, -, =, ==, ::) */
+.token.operator,
+.token.arrow,
+.token.entity {
+  color: #D2A8FF !important; /* Bright Lavender / Purple */
+}
+
+/* Punctuation (;, {, }, (, ), [, ]) */
+.token.punctuation {
+  color: #C9D1D9 !important; /* Clean Light Silver */
+}
+
+/* Comments */
+.token.comment,
+.token.prolog,
+.token.doctype,
+.token.cdata {
+  color: #8B949E !important; /* Muted Slate */
+  font-style: italic;
+}
+
+/* Variables, Properties */
+.token.property,
+.token.variable {
+  color: #79C0FF !important;
+}
+
+/* HTML / XML tags & attributes */
+.token.tag {
+  color: #7EE787 !important;
+}
+.token.attr-name {
+  color: #79C0FF !important;
+}
+
+/* KaTeX custom sizing in chat */
+.katex-display {
+  margin: 0.75em 0 !important;
+  overflow-x: auto;
+  overflow-y: hidden;
+  padding: 0.5em 0;
+}
+
+/* Smooth Fade In */
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+    transform: scale(0.98);
+  }
+  to {
+    opacity: 1;
+    transform: scale(1);
+  }
+}
+
+.animate-fadeIn {
+  animation: fadeIn 0.15s ease-out forwards;
+}

@@ -1,0 +1,11 @@
+# Swasti Local Offline Voice Server Dependencies
+# Fast, lightweight, production-grade requirements
+
+fastapi>=0.115.0
+uvicorn[standard]>=0.30.0
+pydantic>=2.7.0
+faster-whisper>=1.0.0
+kokoro-onnx>=0.3.0
+soundfile>=0.12.1
+python-multipart>=0.0.9
+requests>=2.31.0
