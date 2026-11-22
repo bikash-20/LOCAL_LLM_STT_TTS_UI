@@ -22,8 +22,8 @@ Core Identity & Guidelines:
    - Keep answers well-spaced and structured.`;
 
 export const DEFAULT_VOICE_CONFIG: VoiceConfig = {
-  sttEndpoint: 'http://localhost:5005/transcribe',
-  ttsEndpoint: 'http://localhost:5006/speak',
+  sttEndpoint: 'http://127.0.0.1:5005/transcribe',
+  ttsEndpoint: 'http://127.0.0.1:5006/speak',
   voiceId: 'af_heart',
   speed: 1.0,
   autoSpeak: false,
@@ -32,7 +32,7 @@ export const DEFAULT_VOICE_CONFIG: VoiceConfig = {
 };
 
 export const DEFAULT_OLLAMA_CONFIG: OllamaConfig = {
-  serverUrl: 'http://localhost:11434',
+  serverUrl: 'http://127.0.0.1:11434',
   selectedModel: '',
   temperature: 0.7,
   systemPrompt: SWASTI_SYSTEM_PROMPT
@@ -73,7 +73,15 @@ export function getStoredVoiceConfig(): VoiceConfig {
   try {
     const raw = localStorage.getItem(STORAGE_KEYS.VOICE_CONFIG) || localStorage.getItem('antigravity_voice_config_v1');
     if (!raw) return DEFAULT_VOICE_CONFIG;
-    return { ...DEFAULT_VOICE_CONFIG, ...JSON.parse(raw) };
+    const parsed = JSON.parse(raw);
+    // Auto-migrate macOS localhost to IPv4 127.0.0.1
+    if (parsed.sttEndpoint?.includes('localhost:5005')) {
+      parsed.sttEndpoint = parsed.sttEndpoint.replace('localhost:5005', '127.0.0.1:5005');
+    }
+    if (parsed.ttsEndpoint?.includes('localhost:5006')) {
+      parsed.ttsEndpoint = parsed.ttsEndpoint.replace('localhost:5006', '127.0.0.1:5006');
+    }
+    return { ...DEFAULT_VOICE_CONFIG, ...parsed };
   } catch {
     return DEFAULT_VOICE_CONFIG;
   }
@@ -88,6 +96,10 @@ export function getStoredOllamaConfig(): OllamaConfig {
     const raw = localStorage.getItem(STORAGE_KEYS.OLLAMA_CONFIG) || localStorage.getItem('antigravity_ollama_config_v1');
     if (!raw) return DEFAULT_OLLAMA_CONFIG;
     const parsed = JSON.parse(raw);
+    // Auto-migrate macOS localhost to IPv4 127.0.0.1
+    if (parsed.serverUrl === 'http://localhost:11434') {
+      parsed.serverUrl = 'http://127.0.0.1:11434';
+    }
     // Ensure Swasti persona is active
     if (!parsed.systemPrompt || !parsed.systemPrompt.includes('Swasti') || !parsed.systemPrompt.includes('Bikash Talukder')) {
       parsed.systemPrompt = SWASTI_SYSTEM_PROMPT;

@@ -1,4 +1,4 @@
-const CACHE_NAME = 'swasti-ai-v3';
+const CACHE_NAME = 'swasti-ai-v4';
 const STATIC_ASSETS = [
   '/',
   '/index.html',
@@ -39,6 +39,9 @@ self.addEventListener('fetch', (e) => {
     e.request.url.includes(':11434') ||
     e.request.url.includes(':5005') ||
     e.request.url.includes(':5006') ||
+    e.request.url.includes('/api/tags') ||
+    e.request.url.includes('/api/chat') ||
+    e.request.url.includes('/api/generate') ||
     e.request.method !== 'GET'
   ) {
     return;

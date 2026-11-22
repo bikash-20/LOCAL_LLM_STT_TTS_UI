@@ -115,18 +115,37 @@ export const PreferencesModal: React.FC<PreferencesModalProps> = ({
     setTestingVoice(true);
     setVoiceTestResult(null);
     try {
-      const target = (ttsEndpoint || 'http://localhost:5006/speak').replace(/\/speak$/, '/health');
-      const res = await fetch(target);
-      if (!res.ok) throw new Error(`Status ${res.status}`);
-      const data = await res.json();
-      setVoiceTestResult({
-        success: true,
-        msg: `Swasti 🌸 voice server online! TTS: ${data.tts?.ready ? 'Ready' : 'Standby'}, Whisper STT: ${data.stt?.ready ? 'Ready' : 'Standby'}`
-      });
+      const base = (ttsEndpoint || 'http://127.0.0.1:5006/speak').replace(/\/speak$/, '/health');
+      const candidates = [base];
+      if (base.includes('localhost')) {
+        candidates.push(base.replace('localhost', '127.0.0.1'));
+      } else if (base.includes('127.0.0.1')) {
+        candidates.push(base.replace('127.0.0.1', 'localhost'));
+      }
+      let found = false;
+      for (const target of candidates) {
+        try {
+          const res = await fetch(target);
+          if (res.ok) {
+            const data = await res.json();
+            setVoiceTestResult({
+              success: true,
+              msg: `Swasti 🌸 voice server online! TTS: ${data.tts?.ready ? 'Ready' : 'Standby'}, Whisper STT: ${data.stt?.ready ? 'Ready' : 'Standby'}`
+            });
+            found = true;
+            break;
+          }
+        } catch {
+          // try next candidate
+        }
+      }
+      if (!found) {
+        throw new Error('Could not reach voice server. Run "./start.sh" or "python voice_server.py" to start it.');
+      }
     } catch (err) {
       setVoiceTestResult({
         success: false,
-        msg: `Could not reach voice server. Run 'python voice_server.py' to start it.`
+        msg: err instanceof Error ? err.message : `Could not reach voice server. Run './start.sh' to start it.`
       });
     } finally {
       setTestingVoice(false);
@@ -257,11 +276,23 @@ export const PreferencesModal: React.FC<PreferencesModalProps> = ({
                   <code className="px-2 py-0.5 rounded font-mono text-[12px] border" style={{ borderColor: 'var(--border-color)', backgroundColor: 'var(--card-bg)', color: 'var(--c1)' }}>OLLAMA_HOST=0.0.0.0 ollama serve</code>.
                 </p>
 
-                <div className="flex items-center gap-3 mt-3">
+                <div className="flex items-center gap-2.5 mt-3 flex-wrap">
+                  <button
+                    type="button"
+                    onClick={() => setOllamaUrl('http://127.0.0.1:11434')}
+                    className="px-3.5 py-2 rounded-xl border text-[13px] font-semibold transition-colors hover:opacity-80"
+                    style={{
+                      backgroundColor: 'var(--card-bg)',
+                      borderColor: 'var(--border-color)',
+                      color: 'var(--text-primary)'
+                    }}
+                  >
+                    Use 127.0.0.1
+                  </button>
                   <button
                     type="button"
                     onClick={() => setOllamaUrl('http://localhost:11434')}
-                    className="px-4 py-2 rounded-xl border text-[13.5px] font-semibold transition-colors hover:opacity-80"
+                    className="px-3.5 py-2 rounded-xl border text-[13px] font-semibold transition-colors hover:opacity-80"
                     style={{
                       backgroundColor: 'var(--card-bg)',
                       borderColor: 'var(--border-color)',
@@ -274,13 +305,26 @@ export const PreferencesModal: React.FC<PreferencesModalProps> = ({
                     type="button"
                     onClick={handleTestOllamaConnection}
                     disabled={testingOllama}
-                    className="px-4 py-2 rounded-xl text-[13.5px] font-bold transition-all flex items-center gap-2 text-white shadow-sm"
+                    className="px-4 py-2 rounded-xl text-[13px] font-bold transition-all flex items-center gap-2 text-white shadow-sm"
                     style={{ backgroundColor: 'var(--c1)' }}
                   >
                     {testingOllama && <RefreshCw className="w-4 h-4 animate-spin" />}
                     <span>Test connection</span>
                   </button>
                 </div>
+
+                {typeof window !== 'undefined' && window.location.protocol === 'https:' && (
+                  <div
+                    className="mt-3 p-3 rounded-xl text-[12.5px] border leading-relaxed"
+                    style={{
+                      backgroundColor: 'rgba(232, 65, 44, 0.1)',
+                      borderColor: 'var(--c3)',
+                      color: 'var(--c3)'
+                    }}
+                  >
+                    <strong>🔒 HTTPS Notice:</strong> Browsers block HTTPS pages from accessing insecure <code className="font-mono">http://localhost</code> endpoints (Mixed Content). To connect directly to your local Ollama and local Kokoro voices, run Swasti locally via <code className="font-mono">./start.sh</code> at <code className="font-mono">http://localhost:5173</code>.
+                  </div>
+                )}
 
                 {ollamaTestResult && (
                   <div

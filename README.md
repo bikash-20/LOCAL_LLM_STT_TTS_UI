@@ -26,7 +26,7 @@
 **Swasti 🌸** is designed from the ground up for individuals who demand complete privacy, uncompromising speed, and lifelike natural human voice interactions without sending a single byte of audio or chat data to external servers.
 
 Running entirely on your local machine (macOS / Linux / Windows):
-1. **Local LLM Engine**: Connects directly to [Ollama](https://ollama.ai) (`http://localhost:11434` or local network LAN IP) with streaming responses.
+1. **Local LLM Engine**: Connects directly to [Ollama](https://ollama.ai) (`http://127.0.0.1:11434` or local network LAN IP) with streaming responses.
 2. **Neural Speech Synthesis (TTS)**: Powered by **Kokoro-82M ONNX**, generating warm, expressive, ultra-realistic human voices with near-zero latency.
 3. **Local Speech Recognition (STT)**: Powered by **faster-whisper** for instant, accurate audio-to-text transcription.
 4. **Editorial Typography & Visual Taste**: Built with modern luxury fonts (**Plus Jakarta Sans**, **Playfair Display**, **JetBrains Mono**), responsive collapsible layout, and 3 active multi-color palettes.

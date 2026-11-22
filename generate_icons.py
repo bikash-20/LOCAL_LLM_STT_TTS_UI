@@ -106,9 +106,15 @@ def generate_3d_icons():
         draw.line([(0, y), (render_size, y)], fill=(r, g, b, 255))
 
     # Top edge subtle 3D rim highlight (Apple macOS signature specular highlight)
-    for y in range(int(4 * scale)):
-        alpha = int(110 * (1 - y / (4 * scale)))
-        draw.line([(0, y), (render_size, y)], fill=(255, 255, 255, alpha))
+    # Inset by 64*scale so top-left and top-right corners remain pure solid background
+    rim_img = Image.new("RGBA", (render_size, render_size), (0, 0, 0, 0))
+    rim_draw = ImageDraw.Draw(rim_img)
+    rim_inset = int(80 * scale)
+    for y in range(int(6 * scale)):
+        alpha = int(70 * (1.0 - y / (6.0 * scale)))
+        rim_draw.line([(rim_inset, y), (render_size - rim_inset, y)], fill=(255, 255, 255, alpha))
+    rim_img = rim_img.filter(ImageFilter.GaussianBlur(radius=int(2 * scale)))
+    img = Image.alpha_composite(img, rim_img)
 
     # Ambient radial warm glow behind flower
     cx = render_size // 2
