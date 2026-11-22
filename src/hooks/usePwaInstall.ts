@@ -8,7 +8,9 @@ interface BeforeInstallPromptEvent extends Event {
 const DISMISS_KEY = 'swasti_pwa_install_dismissed_until';
 
 export function usePwaInstall() {
-  const [deferredPrompt, setDeferredPrompt] = useState<BeforeInstallPromptEvent | null>(null);
+  const [deferredPrompt, setDeferredPrompt] = useState<BeforeInstallPromptEvent | null>(() => {
+    return (window as unknown as { __deferredPrompt?: BeforeInstallPromptEvent }).__deferredPrompt || null;
+  });
   const [isStandalone, setIsStandalone] = useState(false);
   const [isIOS, setIsIOS] = useState(false);
   const [isDismissed, setIsDismissed] = useState(false);
@@ -22,10 +24,24 @@ export function usePwaInstall() {
         (window.navigator as unknown as { standalone?: boolean }).standalone === true ||
         document.referrer.includes('android-app://');
       setIsStandalone(isStandaloneMode);
-      setIsInstalled(isStandaloneMode);
+      if (isStandaloneMode) {
+        setIsInstalled(true);
+      }
     };
 
     checkStandalone();
+
+    // Check if Chrome / system has already installed the app
+    if ('getInstalledRelatedApps' in navigator) {
+      (navigator as unknown as { getInstalledRelatedApps: () => Promise<unknown[]> })
+        .getInstalledRelatedApps()
+        .then((apps) => {
+          if (apps && apps.length > 0) {
+            setIsInstalled(true);
+          }
+        })
+        .catch(() => {});
+    }
 
     // Detect iOS
     const userAgent = window.navigator.userAgent.toLowerCase();
@@ -44,36 +60,57 @@ export function usePwaInstall() {
       console.warn('Could not read install dismissal state:', e);
     }
 
-    // Capture standard PWA beforeinstallprompt event (Chromium, Android, Edge)
+    // Capture early or live prompt event
+    const handlePromptReady = () => {
+      const prompt = (window as unknown as { __deferredPrompt?: BeforeInstallPromptEvent }).__deferredPrompt;
+      if (prompt) {
+        setDeferredPrompt(prompt);
+      }
+    };
+
+    // Live beforeinstallprompt event
     const handleBeforeInstallPrompt = (e: Event) => {
       e.preventDefault();
+      (window as unknown as { __deferredPrompt?: Event }).__deferredPrompt = e;
       setDeferredPrompt(e as BeforeInstallPromptEvent);
     };
 
-    // Capture appinstalled event
+    // App installed event
     const handleAppInstalled = () => {
       setIsInstalled(true);
       setDeferredPrompt(null);
+      (window as unknown as { __deferredPrompt?: null }).__deferredPrompt = null;
     };
 
+    window.addEventListener('pwa-prompt-ready', handlePromptReady);
     window.addEventListener('beforeinstallprompt', handleBeforeInstallPrompt);
     window.addEventListener('appinstalled', handleAppInstalled);
+    window.addEventListener('pwa-installed', handleAppInstalled);
 
     return () => {
+      window.removeEventListener('pwa-prompt-ready', handlePromptReady);
       window.removeEventListener('beforeinstallprompt', handleBeforeInstallPrompt);
       window.removeEventListener('appinstalled', handleAppInstalled);
+      window.removeEventListener('pwa-installed', handleAppInstalled);
     };
   }, []);
 
   const installApp = useCallback(async () => {
-    if (deferredPrompt) {
-      await deferredPrompt.prompt();
-      const choice = await deferredPrompt.userChoice;
-      if (choice.outcome === 'accepted') {
-        setIsInstalled(true);
-        setDeferredPrompt(null);
+    const promptEvent =
+      deferredPrompt || (window as unknown as { __deferredPrompt?: BeforeInstallPromptEvent }).__deferredPrompt;
+    if (promptEvent) {
+      try {
+        await promptEvent.prompt();
+        const choice = await promptEvent.userChoice;
+        if (choice && choice.outcome === 'accepted') {
+          setIsInstalled(true);
+          setDeferredPrompt(null);
+          (window as unknown as { __deferredPrompt?: null }).__deferredPrompt = null;
+          return true;
+        }
+      } catch (err) {
+        console.error('PWA install prompt error:', err);
       }
-      return choice.outcome === 'accepted';
     }
     return false;
   }, [deferredPrompt]);
@@ -97,9 +134,17 @@ export function usePwaInstall() {
     }
   }, []);
 
+  const hasNativePrompt = !!deferredPrompt || !!(window as unknown as { __deferredPrompt?: unknown }).__deferredPrompt;
+
+  // IMPORTANT: On desktop, we only show the install recommendation banner if the browser has
+  // a real native prompt ready, or on iOS where step-by-step guidance is expected.
+  // If the app is already installed, or if dismissed, we NEVER show it.
+  const canShowBanner = !isStandalone && !isInstalled && !isDismissed && (hasNativePrompt || isIOS);
+
   return {
     canInstall: !isStandalone && !isInstalled,
-    hasNativePrompt: !!deferredPrompt,
+    canShowBanner,
+    hasNativePrompt,
     isStandalone,
     isInstalled,
     isIOS,

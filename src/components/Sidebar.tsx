@@ -1,6 +1,5 @@
 import React, { useState } from 'react';
 import { ChatSession, ThemeMode } from '../types';
-import { usePwaInstall } from '../hooks/usePwaInstall';
 import {
   Plus,
   MessageSquare,
@@ -59,8 +58,6 @@ export const Sidebar: React.FC<SidebarProps> = ({
   const [searchQuery, setSearchQuery] = useState('');
   const [editingId, setEditingId] = useState<string | null>(null);
   const [editTitle, setEditTitle] = useState('');
-
-  const { canInstall, hasNativePrompt, installApp, resetDismissal } = usePwaInstall();
 
   const filteredSessions = sessions.filter(s =>
     s.title.toLowerCase().includes(searchQuery.toLowerCase())
@@ -380,31 +377,6 @@ export const Sidebar: React.FC<SidebarProps> = ({
               <Heart className="w-3 h-3 fill-current inline" style={{ color: 'var(--c3)' }} />
             </p>
           </div>
-
-          {/* PWA Install Button in Sidebar */}
-          {canInstall && (
-            <div className="px-4 py-2 border-t" style={{ borderColor: 'var(--border-color)', backgroundColor: 'var(--sidebar-bg)' }}>
-              <button
-                onClick={() => {
-                  if (hasNativePrompt) {
-                    installApp();
-                  } else {
-                    resetDismissal();
-                  }
-                }}
-                className="w-full py-2 px-3 rounded-xl border text-[12.5px] font-bold flex items-center justify-center gap-2 transition-all shadow-sm hover:scale-[1.01]"
-                style={{
-                  backgroundColor: 'rgba(156, 175, 136, 0.12)',
-                  borderColor: 'var(--c1)',
-                  color: 'var(--c1)'
-                }}
-                title="Install Swasti 🌸 App"
-              >
-                <Download className="w-3.5 h-3.5" />
-                <span>Install Swasti 🌸 App</span>
-              </button>
-            </div>
-          )}
 
           {/* Footer Settings & Theme */}
           <div className="p-3 border-t flex items-center justify-between" style={{ borderColor: 'var(--border-color)', backgroundColor: 'var(--sidebar-bg)' }}>

@@ -1,13 +1,12 @@
 import React, { useState } from 'react';
-import { Download, X, Sparkles, Share2, PlusSquare, Smartphone, Laptop, Check, Info } from 'lucide-react';
+import { Download, X, Sparkles, Share2, PlusSquare, Smartphone, Check } from 'lucide-react';
 import { usePwaInstall } from '../hooks/usePwaInstall';
 
 export const InstallBanner: React.FC = () => {
   const {
-    canInstall,
+    canShowBanner,
     hasNativePrompt,
     isIOS,
-    isDismissed,
     installApp,
     dismissBanner
   } = usePwaInstall();
@@ -15,8 +14,8 @@ export const InstallBanner: React.FC = () => {
   const [showIOSGuide, setShowIOSGuide] = useState(false);
   const [installedSuccess, setInstalledSuccess] = useState(false);
 
-  // If already running in standalone mode, or user dismissed it, don't show
-  if (!canInstall || isDismissed) {
+  // If already installed, running in standalone mode, dismissed, or on desktop without prompt, do not show
+  if (!canShowBanner) {
     return null;
   }
 
@@ -25,12 +24,9 @@ export const InstallBanner: React.FC = () => {
       const accepted = await installApp();
       if (accepted) {
         setInstalledSuccess(true);
-        setTimeout(() => dismissBanner(365), 3000);
+        setTimeout(() => dismissBanner(365), 2500);
       }
     } else if (isIOS) {
-      setShowIOSGuide((prev) => !prev);
-    } else {
-      // Desktop / Mac Chrome/Safari without direct prompt
       setShowIOSGuide((prev) => !prev);
     }
   };
@@ -83,7 +79,9 @@ export const InstallBanner: React.FC = () => {
             </div>
 
             <p className="text-[12.5px] sm:text-[13px] font-medium leading-relaxed mt-0.5 line-clamp-2" style={{ color: 'var(--text-muted)' }}>
-              Install as a native desktop or mobile app for instant offline launch, distraction-free window, and real-time voice conversations.
+              {isIOS
+                ? 'Add Swasti 🌸 to your Home Screen for full-screen voice conversations and offline speed.'
+                : 'Install as a native desktop or mobile app for instant offline launch, standalone window, and realistic voice chats.'}
             </p>
           </div>
         </div>
@@ -102,10 +100,10 @@ export const InstallBanner: React.FC = () => {
               style={{
                 backgroundColor: 'var(--c1)'
               }}
-              title="Install Swasti 🌸 application"
+              title={isIOS ? 'Show iOS install guide' : 'Install Swasti 🌸 application'}
             >
               <Download className="w-4 h-4" />
-              <span>Install App</span>
+              <span>{isIOS ? 'Add to Home Screen' : 'Install App'}</span>
             </button>
           )}
 
@@ -120,46 +118,29 @@ export const InstallBanner: React.FC = () => {
         </div>
       </div>
 
-      {/* Expandable Manual Install Guide for iOS Safari or Desktop Address Bar */}
-      {showIOSGuide && (
+      {/* Expandable Manual Install Guide ONLY for iOS Safari */}
+      {isIOS && showIOSGuide && (
         <div
           className="mt-3.5 pt-3.5 border-t text-[12.5px] sm:text-[13px] space-y-2 animate-fadeIn"
           style={{ borderColor: 'var(--border-color)' }}
         >
-          {isIOS ? (
-            <div className="space-y-1.5">
-              <p className="font-bold flex items-center gap-1.5" style={{ color: 'var(--c1)' }}>
-                <Smartphone className="w-4 h-4" />
-                <span>How to Install on iPhone / iPad (Safari):</span>
-              </p>
-              <ol className="list-decimal list-inside space-y-1 pl-1" style={{ color: 'var(--text-secondary)' }}>
-                <li>
-                  Tap the <strong className="font-bold">Share</strong> button <Share2 className="w-3.5 h-3.5 inline mx-1" style={{ color: 'var(--c1)' }} /> in Safari's bottom toolbar.
-                </li>
-                <li>
-                  Scroll down the share sheet and tap <strong className="font-bold">Add to Home Screen</strong> <PlusSquare className="w-3.5 h-3.5 inline mx-1" style={{ color: 'var(--c1)' }} />.
-                </li>
-                <li>
-                  Tap <strong className="font-bold">Add</strong> in the top-right corner. Swasti 🌸 will appear on your Home Screen!
-                </li>
-              </ol>
-            </div>
-          ) : (
-            <div className="space-y-1.5">
-              <p className="font-bold flex items-center gap-1.5" style={{ color: 'var(--c1)' }}>
-                <Laptop className="w-4 h-4" />
-                <span>How to Install on Mac / Windows / Desktop:</span>
-              </p>
-              <ul className="list-disc list-inside space-y-1 pl-1" style={{ color: 'var(--text-secondary)' }}>
-                <li>
-                  In <strong className="font-bold">Google Chrome / Brave / Edge</strong>: Click the <strong className="font-bold">Install</strong> icon <Download className="w-3.5 h-3.5 inline mx-1" style={{ color: 'var(--c1)' }} /> in the right side of the URL address bar.
-                </li>
-                <li>
-                  In <strong className="font-bold">macOS Sonoma Safari</strong>: Click <strong className="font-bold">File &gt; Add to Dock...</strong> to run Swasti 🌸 as an official Mac application.
-                </li>
-              </ul>
-            </div>
-          )}
+          <div className="space-y-1.5">
+            <p className="font-bold flex items-center gap-1.5" style={{ color: 'var(--c1)' }}>
+              <Smartphone className="w-4 h-4" />
+              <span>How to Install on iPhone / iPad (Safari):</span>
+            </p>
+            <ol className="list-decimal list-inside space-y-1 pl-1" style={{ color: 'var(--text-secondary)' }}>
+              <li>
+                Tap the <strong className="font-bold">Share</strong> button <Share2 className="w-3.5 h-3.5 inline mx-1" style={{ color: 'var(--c1)' }} /> in Safari's bottom toolbar.
+              </li>
+              <li>
+                Scroll down the share sheet and tap <strong className="font-bold">Add to Home Screen</strong> <PlusSquare className="w-3.5 h-3.5 inline mx-1" style={{ color: 'var(--c1)' }} />.
+              </li>
+              <li>
+                Tap <strong className="font-bold">Add</strong> in the top-right corner. Swasti 🌸 will appear on your Home Screen!
+              </li>
+            </ol>
+          </div>
         </div>
       )}
     </div>
