@@ -157,27 +157,29 @@ export const MessageItem: React.FC<MessageItemProps> = ({
                 {message.content}
               </p>
             ) : !message.content || !message.content.trim() ? (
-              /* Swasti 🌸 Thinking Animation (Lively & Responsive) */
-              <div className="flex items-center gap-3 py-2 animate-fadeIn">
-                <div
-                  className="inline-flex items-center gap-2.5 px-4 py-2 rounded-2xl border shadow-sm transition-all"
-                  style={{
-                    backgroundColor: 'rgba(156, 175, 136, 0.12)',
-                    borderColor: 'var(--c1)',
-                    color: 'var(--c1)'
-                  }}
-                >
-                  <Sparkles className="w-4 h-4 animate-spin text-[var(--c1)]" style={{ animationDuration: '3s' }} />
-                  <span className="font-extrabold text-[15px] sm:text-[16px] tracking-wide font-sans">
-                    Swasti 🌸 thinking...
-                  </span>
-                  <span className="flex items-center gap-1 ml-0.5">
-                    <span className="w-1.5 h-1.5 rounded-full animate-bounce" style={{ backgroundColor: 'var(--c1)', animationDelay: '0ms' }} />
-                    <span className="w-1.5 h-1.5 rounded-full animate-bounce" style={{ backgroundColor: 'var(--c1)', animationDelay: '150ms' }} />
-                    <span className="w-1.5 h-1.5 rounded-full animate-bounce" style={{ backgroundColor: 'var(--c1)', animationDelay: '300ms' }} />
-                  </span>
+              /* Swasti 🌸 Thinking Animation: ONLY shown while chat does not load yet */
+              isStreaming ? (
+                <div className="flex items-center gap-3 py-2 animate-fadeIn">
+                  <div
+                    className="inline-flex items-center gap-2.5 px-4 py-2 rounded-2xl border shadow-sm transition-all"
+                    style={{
+                      backgroundColor: 'rgba(156, 175, 136, 0.12)',
+                      borderColor: 'var(--c1)',
+                      color: 'var(--c1)'
+                    }}
+                  >
+                    <Sparkles className="w-4 h-4 animate-spin text-[var(--c1)]" style={{ animationDuration: '3s' }} />
+                    <span className="font-extrabold text-[15px] sm:text-[16px] tracking-wide font-sans">
+                      Swasti 🌸 thinking...
+                    </span>
+                    <span className="flex items-center gap-1 ml-0.5">
+                      <span className="w-1.5 h-1.5 rounded-full animate-bounce" style={{ backgroundColor: 'var(--c1)', animationDelay: '0ms' }} />
+                      <span className="w-1.5 h-1.5 rounded-full animate-bounce" style={{ backgroundColor: 'var(--c1)', animationDelay: '150ms' }} />
+                      <span className="w-1.5 h-1.5 rounded-full animate-bounce" style={{ backgroundColor: 'var(--c1)', animationDelay: '300ms' }} />
+                    </span>
+                  </div>
                 </div>
-              </div>
+              ) : null
             ) : (
               <div className="text-[18px] sm:text-[18.5px] leading-[1.85] relative">
                 <MarkdownRenderer content={message.content} />
