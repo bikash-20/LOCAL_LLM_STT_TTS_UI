@@ -263,17 +263,21 @@ export const ChatArea: React.FC<ChatAreaProps> = ({
         ) : (
           /* Message List */
           <div className="pb-6">
-            {session.messages.map((message) => (
-              <MessageItem
-                key={message.id}
-                message={message}
-                voiceConfig={voiceConfig}
-                onSpeak={onSpeak}
-                onStopSpeak={onStopSpeak}
-                isPlayingThis={playingMessageId === message.id}
-                isSynthesizingThis={synthesizingMessageId === message.id}
-              />
-            ))}
+            {session.messages.map((message, idx) => {
+              const isLast = idx === session.messages.length - 1;
+              return (
+                <MessageItem
+                  key={message.id}
+                  message={message}
+                  voiceConfig={voiceConfig}
+                  onSpeak={onSpeak}
+                  onStopSpeak={onStopSpeak}
+                  isPlayingThis={playingMessageId === message.id}
+                  isSynthesizingThis={synthesizingMessageId === message.id}
+                  isStreaming={isGenerating && isLast && message.role === 'assistant'}
+                />
+              );
+            })}
             <div ref={messagesEndRef} />
           </div>
         )}
@@ -309,6 +313,26 @@ export const ChatArea: React.FC<ChatAreaProps> = ({
               >
                 Done
               </button>
+            </div>
+          )}
+
+          {/* Swasti Thinking Live Status Indicator */}
+          {isGenerating && (
+            <div
+              className="mb-2.5 px-3.5 py-1.5 rounded-xl border inline-flex items-center gap-2 text-[13px] font-bold animate-fadeIn shadow-sm"
+              style={{
+                backgroundColor: 'rgba(156, 175, 136, 0.12)',
+                borderColor: 'var(--c1)',
+                color: 'var(--c1)'
+              }}
+            >
+              <Sparkles className="w-3.5 h-3.5 animate-spin text-[var(--c1)]" style={{ animationDuration: '3s' }} />
+              <span>Swasti 🌸 thinking...</span>
+              <span className="flex items-center gap-1 ml-0.5">
+                <span className="w-1 h-1 rounded-full animate-bounce" style={{ backgroundColor: 'var(--c1)', animationDelay: '0ms' }} />
+                <span className="w-1 h-1 rounded-full animate-bounce" style={{ backgroundColor: 'var(--c1)', animationDelay: '150ms' }} />
+                <span className="w-1 h-1 rounded-full animate-bounce" style={{ backgroundColor: 'var(--c1)', animationDelay: '300ms' }} />
+              </span>
             </div>
           )}
 
