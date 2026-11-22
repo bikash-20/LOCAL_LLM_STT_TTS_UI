@@ -45,7 +45,7 @@ export function useTextToSpeech(config: VoiceConfig) {
 
     if (!text || !text.trim()) return;
 
-    // Filter out markdown code blocks and raw math for speech synthesis
+    // Filter out markdown code blocks, raw math, and emojis for natural human speech
     const cleanSpeechText = text
       .replace(/```[\s\S]*?```/g, ' [Code omitted] ')
       .replace(/`([^`]+)`/g, '$1')
@@ -53,6 +53,10 @@ export function useTextToSpeech(config: VoiceConfig) {
       .replace(/\$([^$]+)\$/g, '$1')
       .replace(/\[([^\]]+)\]\([^)]+\)/g, '$1')
       .replace(/[*#_~>]/g, '')
+      // Strip all Unicode emojis, pictographs, variation selectors, zero-width chars
+      .replace(/\p{Extended_Pictographic}|\p{Emoji_Presentation}|\uFE0F|\u200D|\u200B/gu, '')
+      // Clean up whitespace around punctuation
+      .replace(/\s+([.,!?;:])/g, '$1')
       .replace(/\s+/g, ' ')
       .trim();
 

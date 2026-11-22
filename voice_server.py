@@ -11,6 +11,7 @@ Default ports:
 
 import os
 import sys
+import re
 import io
 import time
 import logging
@@ -176,8 +177,12 @@ def speak(req: SpeakRequest):
 
     try:
         start_t = time.time()
-        # Clean markdown formatting so speech sounds conversational and natural
-        clean_text = req.text.replace("```", "").replace("**", "").replace("*", "").replace("#", "").strip()
+        # Clean markdown formatting and strip all emojis so speech sounds conversational and natural
+        clean_text = req.text.replace("```", "").replace("**", "").replace("*", "").replace("#", "")
+        # Remove Unicode emojis, pictographs, dingbats, and variation selectors
+        clean_text = re.sub(r"[\U00010000-\U0010ffff\u2600-\u27bf\uFE00-\uFE0F\u200B-\u200D]+", "", clean_text)
+        clean_text = re.sub(r"\s+([.,!?;:])", r"\1", clean_text)
+        clean_text = re.sub(r"\s+", " ", clean_text).strip()
         samples, sample_rate = kokoro_model.create(
             clean_text,
             voice=voice_id,
