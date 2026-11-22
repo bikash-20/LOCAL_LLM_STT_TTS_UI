@@ -1,163 +1,422 @@
 import os
 import math
+import numpy as np
 from PIL import Image, ImageDraw, ImageFont, ImageFilter
 
-def create_icons():
+def create_3d_petal(petal_len, petal_w):
+    """
+    Generate a photorealistic 3D sakura petal with Blinn-Phong lighting,
+    specular highlight, surface curvature, and classic notched tip.
+    """
+    w = int(petal_w * 2.3)
+    h = int(petal_len * 1.35)
+    cx = w // 2
+    base_y = int(petal_len * 1.18)
+
+    Y, X = np.ogrid[:h, :w]
+    dx = (X - cx) / float(petal_w)
+    dy = (base_y - Y) / float(petal_len)
+
+    valid = (dy >= 0) & (dy <= 1.06)
+    width_profile = np.sin(np.clip(dy, 0, 1) * math.pi * 0.86)
+
+    # Notch indentation at tip (around dy ~ 1.0)
+    notch = np.where((dy > 0.82) & (np.abs(dx) < 0.38), (1.0 - (np.abs(dx) / 0.38)) * 0.17, 0.0)
+    max_dy = 1.03 - notch
+    inside = valid & (dy <= max_dy) & (np.abs(dx) <= (width_profile * 1.06))
+
+    # 3D Heightmap Z
+    z_long = np.sin(np.clip(dy, 0, 1) * math.pi * 0.74)
+    z_trans = np.cos(np.clip(dx / (width_profile + 1e-5), -1, 1) * (math.pi / 2.0))
+    midrib = 0.14 * (1.0 - np.exp(-(dx * 5.5)**2))
+
+    Z = np.where(inside, (z_long * (z_trans * 0.82 + 0.18) - midrib), 0.0)
+    Z = np.clip(Z, 0, 1.0)
+
+    # Gradients for surface normals
+    dZ_dy, dZ_dx = np.gradient(Z)
+    dZ_dx *= 3.8
+    dZ_dy *= 3.8
+
+    norm = np.sqrt(dZ_dx**2 + dZ_dy**2 + 1.0)
+    Nx = -dZ_dx / norm
+    Ny = dZ_dy / norm
+    Nz = 1.0 / norm
+
+    # Top-Left studio key light (elevation 48 deg, azimuth -45 deg)
+    L = np.array([-0.55, 0.65, 0.52])
+    L = L / np.linalg.norm(L)
+
+    diff = np.clip(Nx * L[0] + Ny * L[1] + Nz * L[2], 0, 1.0)
+
+    # Specular shine
+    H = L + np.array([0, 0, 1.0])
+    H = H / np.linalg.norm(H)
+    spec = np.clip(Nx * H[0] + Ny * H[1] + Nz * H[2], 0, 1.0) ** 16
+
+    # Rich natural color gradient:
+    # Deep ruby/crimson coral base -> luminous velvety sakura pink -> soft pearlescent blush tip
+    t_color = np.clip(dy * 1.08, 0, 1)
+    base_r = 215 * (1 - t_color) + 254 * t_color
+    base_g = 25 * (1 - t_color) + 125 * t_color
+    base_b = 68 * (1 - t_color) + 155 * t_color
+
+    ambient = 0.40
+    light_total = ambient + (1.0 - ambient) * diff
+
+    R = np.clip(base_r * light_total + 255 * spec * 0.85, 0, 255)
+    G = np.clip(base_g * light_total + 235 * spec * 0.85, 0, 255)
+    B = np.clip(base_b * light_total + 242 * spec * 0.85, 0, 255)
+
+    alpha = np.where(inside, 255, 0).astype(np.uint8)
+
+    rgba = np.zeros((h, w, 4), dtype=np.uint8)
+    rgba[..., 0] = R.astype(np.uint8)
+    rgba[..., 1] = G.astype(np.uint8)
+    rgba[..., 2] = B.astype(np.uint8)
+    rgba[..., 3] = alpha
+
+    petal_img = Image.fromarray(rgba, mode="RGBA")
+    alpha_img = petal_img.split()[3].filter(ImageFilter.GaussianBlur(radius=1.4))
+    petal_img.putalpha(alpha_img)
+
+    return petal_img, cx, base_y
+
+
+def generate_3d_icons():
     script_dir = os.path.dirname(os.path.abspath(__file__))
     output_dir = os.path.join(script_dir, "public")
     os.makedirs(output_dir, exist_ok=True)
 
-    # 1. First, create master SVG (crisp, scalable vector)
-    # The SVG contains the vector sakura flower, radiant pistils/stamens, and 'Swasti AI' text
+    # High-resolution rendering at 2048x2048 (4x supersampling for 512x512)
+    render_size = 2048
+    scale = render_size / 512.0
+
+    # 1. FULL BLEED SOLID BACKGROUND (NO TRANSPARENT CORNERS)
+    # This completely eliminates macOS Chrome's artificial white squircle card
+    img = Image.new("RGBA", (render_size, render_size), (15, 16, 25, 255))
+    draw = ImageDraw.Draw(img)
+
+    # Deep obsidian gradient from #18192A at top to #0B0C13 at bottom
+    for y in range(render_size):
+        t = y / float(render_size)
+        r = int(24 * (1 - t) + 10 * t)
+        g = int(26 * (1 - t) + 11 * t)
+        b = int(42 * (1 - t) + 18 * t)
+        draw.line([(0, y), (render_size, y)], fill=(r, g, b, 255))
+
+    # Top edge subtle 3D rim highlight (Apple macOS signature specular highlight)
+    for y in range(int(4 * scale)):
+        alpha = int(110 * (1 - y / (4 * scale)))
+        draw.line([(0, y), (render_size, y)], fill=(255, 255, 255, alpha))
+
+    # Ambient radial warm glow behind flower
+    cx = render_size // 2
+    cy = int(render_size * 0.42)
+    glow_radius = int(250 * scale)
+    glow_img = Image.new("RGBA", (render_size, render_size), (0, 0, 0, 0))
+    glow_draw = ImageDraw.Draw(glow_img)
+    for r in range(glow_radius, 0, -int(4 * scale)):
+        factor = 1.0 - (r / glow_radius)
+        alpha = int(60 * (factor ** 1.9))
+        glow_draw.ellipse([cx - r, cy - r, cx + r, cy + r], fill=(255, 80, 115, alpha))
+    glow_img = glow_img.filter(ImageFilter.GaussianBlur(radius=int(32 * scale)))
+    img = Image.alpha_composite(img, glow_img)
+
+    # 2. RENDER 3D BLOSSOM
+    petal_len = int(195 * scale)
+    petal_w = int(82 * scale)
+    petal_master, pcx, pbase_y = create_3d_petal(petal_len, petal_w)
+
+    flower_layer = Image.new("RGBA", (render_size, render_size), (0, 0, 0, 0))
+
+    # 5 Petals arranged in circle with realistic 3D overlap and contact shadows
+    num_petals = 5
+    for i in range(num_petals):
+        angle_deg = -18 + i * 72
+
+        # Rotate petal around its base (pcx, pbase_y)
+        # To do this cleanly, create a larger canvas, place petal with base at center, then rotate
+        p_canvas_size = int(petal_len * 2.8)
+        p_canvas = Image.new("RGBA", (p_canvas_size, p_canvas_size), (0, 0, 0, 0))
+        paste_x = p_canvas_size // 2 - pcx
+        paste_y = p_canvas_size // 2 - pbase_y
+        p_canvas.paste(petal_master, (paste_x, paste_y), petal_master)
+
+        # Rotate
+        rotated_petal = p_canvas.rotate(-angle_deg, resample=Image.Resampling.BICUBIC)
+
+        # Subtle petal drop shadow
+        shadow_canvas = Image.new("RGBA", (p_canvas_size, p_canvas_size), (0, 0, 0, 0))
+        r_alpha = rotated_petal.split()[3]
+        black_fill = Image.new("RGBA", (p_canvas_size, p_canvas_size), (0, 0, 0, 140))
+        shadow_canvas.paste(black_fill, (0, 0), r_alpha)
+        shadow_canvas = shadow_canvas.filter(ImageFilter.GaussianBlur(radius=int(10 * scale)))
+
+        # Paste shadow slightly offset
+        s_offset_x = int(cx - p_canvas_size // 2 + 6 * scale)
+        s_offset_y = int(cy - p_canvas_size // 2 + 12 * scale)
+        flower_layer.paste(shadow_canvas, (s_offset_x, s_offset_y), shadow_canvas)
+
+        # Paste petal
+        offset_x = cx - p_canvas_size // 2
+        offset_y = cy - p_canvas_size // 2
+        flower_layer.paste(rotated_petal, (offset_x, offset_y), rotated_petal)
+
+    # Combined flower drop shadow on background tile
+    flower_shadow = Image.new("RGBA", (render_size, render_size), (0, 0, 0, 0))
+    f_alpha = flower_layer.split()[3]
+    f_shadow_color = Image.new("RGBA", (render_size, render_size), (0, 0, 0, 160))
+    flower_shadow.paste(f_shadow_color, (0, 0), f_alpha)
+    flower_shadow = flower_shadow.filter(ImageFilter.GaussianBlur(radius=int(22 * scale)))
+
+    # Composite flower shadow then flower
+    img.paste(flower_shadow, (int(4 * scale), int(18 * scale)), flower_shadow)
+    img = Image.alpha_composite(img, flower_layer)
+
+    # 3. 3D GOLDEN STAMENS & PEARL ANTHERS
+    stamen_layer = Image.new("RGBA", (render_size, render_size), (0, 0, 0, 0))
+    s_draw = ImageDraw.Draw(stamen_layer)
+
+    num_stamens = 12
+    stamen_len = 54 * scale
+    anther_radius = int(8.5 * scale)
+
+    for j in range(num_stamens):
+        angle_rad = math.radians(j * (360 / num_stamens) + 15)
+        sx = cx + math.cos(angle_rad) * stamen_len
+        sy = cy + math.sin(angle_rad) * stamen_len
+
+        # Golden filament line with drop shadow
+        s_draw.line([cx, cy, sx, sy], fill=(245, 158, 11, 230), width=int(4 * scale))
+
+        # 3D Pearl Anther Bead (Spherical shading)
+        # 1. Base amber bead
+        s_draw.ellipse([sx - anther_radius, sy - anther_radius, sx + anther_radius, sy + anther_radius], fill=(245, 158, 11, 255), outline=(217, 119, 6, 255), width=int(1.5 * scale))
+        # 2. Golden rim
+        inner_r = anther_radius * 0.75
+        s_draw.ellipse([sx - inner_r, sy - inner_r, sx + inner_r, sy + inner_r], fill=(252, 211, 77, 255))
+        # 3. Specular highlight glint (pinpoint top-left shine)
+        glint_x = sx - anther_radius * 0.35
+        glint_y = sy - anther_radius * 0.35
+        glint_r = anther_radius * 0.35
+        s_draw.ellipse([glint_x - glint_r, glint_y - glint_r, glint_x + glint_r, glint_y + glint_r], fill=(255, 255, 250, 255))
+
+    # Center 3D Pistil Jewel Dome
+    core_r = int(26 * scale)
+    # Outer ruby border
+    s_draw.ellipse([cx - core_r, cy - core_r, cx + core_r, cy + core_r], fill=(190, 18, 60, 255), outline=(245, 158, 11, 255), width=int(3 * scale))
+    # Mid-layer gold starburst ring
+    mid_r = int(16 * scale)
+    s_draw.ellipse([cx - mid_r, cy - mid_r, cx + mid_r, cy + mid_r], fill=(245, 158, 11, 255))
+    # Top specular dome
+    top_r = int(9 * scale)
+    s_draw.ellipse([cx - top_r, cy - top_r, cx + top_r, cy + top_r], fill=(255, 251, 235, 255))
+
+    img = Image.alpha_composite(img, stamen_layer)
+    draw = ImageDraw.Draw(img)
+
+    # 4. 3D EMBOSSED TYPOGRAPHY
+    font_path = "/System/Library/Fonts/Supplemental/Arial Bold.ttf"
+    if not os.path.exists(font_path):
+        font_path = "/System/Library/Fonts/Helvetica.ttc"
+
+    try:
+        font_main = ImageFont.truetype(font_path, int(48 * scale))
+        font_sub = ImageFont.truetype(font_path, int(16 * scale))
+    except Exception:
+        font_main = ImageFont.load_default()
+        font_sub = ImageFont.load_default()
+
+    # Draw "SWASTI AI" with 3D drop shadow
+    text_main = "SWASTI AI"
+    bbox = draw.textbbox((0, 0), text_main, font=font_main)
+    w_text = bbox[2] - bbox[0]
+    tx = (render_size - w_text) // 2
+    ty = int(410 * scale)
+
+    # Drop shadow below text
+    shadow_color = (0, 0, 0, 220)
+    draw.text((tx, ty + int(6 * scale)), text_main, font=font_main, fill=shadow_color)
+    draw.text((tx, ty + int(3 * scale)), text_main, font=font_main, fill=(0, 0, 0, 140))
+    # Crisp white face
+    draw.text((tx, ty), text_main, font=font_main, fill=(247, 245, 239, 255))
+
+    # Subtitle "VOICE & CHAT" in soft sage green with subtle shadow
+    text_sub = "VOICE & CHAT"
+    bbox_sub = draw.textbbox((0, 0), text_sub, font=font_sub)
+    w_sub = bbox_sub[2] - bbox_sub[0]
+    sx = (render_size - w_sub) // 2
+    sy = int(460 * scale)
+
+    draw.text((sx, sy + int(2 * scale)), text_sub, font=font_sub, fill=(0, 0, 0, 180))
+    draw.text((sx, sy), text_sub, font=font_sub, fill=(156, 175, 136, 250))
+
+    # 5. GENERATE CRISP FULL-BLEED MASTER SVG
+    # Full bleed rect width="512" height="512" (NO transparent corners)
     svg_content = """<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512" width="512" height="512">
   <defs>
-    <!-- Background Gradient -->
-    <linearGradient id="bgGrad" x1="0%" y1="0%" x2="100%" y2="100%">
-      <stop offset="0%" stop-color="#141522" />
-      <stop offset="100%" stop-color="#0E0F16" />
+    <!-- Solid Full Bleed 3D Obsidian Gradient -->
+    <linearGradient id="obsidianGrad" x1="0%" y1="0%" x2="0%" y2="100%">
+      <stop offset="0%" stop-color="#18192A" />
+      <stop offset="50%" stop-color="#12131F" />
+      <stop offset="100%" stop-color="#0B0C13" />
     </linearGradient>
 
-    <!-- Outer Border Subtle Glow -->
-    <linearGradient id="borderGrad" x1="0%" y1="0%" x2="100%" y2="100%">
-      <stop offset="0%" stop-color="#9CAF88" stop-opacity="0.4" />
-      <stop offset="50%" stop-color="#E8412C" stop-opacity="0.3" />
-      <stop offset="100%" stop-color="#FF8DA1" stop-opacity="0.5" />
+    <!-- Top Specular Rim Light -->
+    <linearGradient id="rimLight" x1="0%" y1="0%" x2="100%" y2="0%">
+      <stop offset="0%" stop-color="#FFFFFF" stop-opacity="0.05" />
+      <stop offset="50%" stop-color="#FFFFFF" stop-opacity="0.35" />
+      <stop offset="100%" stop-color="#FFFFFF" stop-opacity="0.05" />
     </linearGradient>
 
-    <!-- Ambient Aura -->
-    <radialGradient id="auraGrad" cx="50%" cy="44%" r="40%">
-      <stop offset="0%" stop-color="#FF8DA1" stop-opacity="0.25" />
-      <stop offset="50%" stop-color="#E8412C" stop-opacity="0.12" />
-      <stop offset="100%" stop-color="#141522" stop-opacity="0" />
+    <!-- Ambient Blossom Glow -->
+    <radialGradient id="bloomGrad" cx="50%" cy="42%" r="45%">
+      <stop offset="0%" stop-color="#FF5B79" stop-opacity="0.35" />
+      <stop offset="50%" stop-color="#E11D48" stop-opacity="0.15" />
+      <stop offset="100%" stop-color="#12131F" stop-opacity="0" />
     </radialGradient>
 
-    <!-- Sakura Petal Gradient -->
-    <linearGradient id="petalGrad" x1="0%" y1="100%" x2="0%" y2="0%">
-      <stop offset="0%" stop-color="#E8412C" />
-      <stop offset="40%" stop-color="#F43F5E" />
-      <stop offset="85%" stop-color="#FFA8BA" />
-      <stop offset="100%" stop-color="#FFE4E8" />
+    <!-- 3D Petal Gradient -->
+    <linearGradient id="petal3DGrad" x1="20%" y1="100%" x2="50%" y2="0%">
+      <stop offset="0%" stop-color="#BE123C" />
+      <stop offset="25%" stop-color="#E11D48" />
+      <stop offset="70%" stop-color="#FB7185" />
+      <stop offset="90%" stop-color="#FDA4AF" />
+      <stop offset="100%" stop-color="#FFF1F2" />
     </linearGradient>
 
-    <!-- Petal Highlight Overlay -->
-    <linearGradient id="petalHighlight" x1="0%" y1="100%" x2="0%" y2="0%">
-      <stop offset="0%" stop-color="#FFFFFF" stop-opacity="0" />
-      <stop offset="80%" stop-color="#FFFFFF" stop-opacity="0.25" />
-      <stop offset="100%" stop-color="#FFFFFF" stop-opacity="0.6" />
+    <!-- Petal Specular Highlight -->
+    <linearGradient id="petalSpecGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#FFFFFF" stop-opacity="0.55" />
+      <stop offset="40%" stop-color="#FFFFFF" stop-opacity="0.15" />
+      <stop offset="100%" stop-color="#FFFFFF" stop-opacity="0" />
     </linearGradient>
 
-    <!-- Center Radiant Core -->
-    <radialGradient id="coreGrad" cx="50%" cy="50%" r="50%">
+    <!-- 3D Center Core -->
+    <radialGradient id="pistilGrad" cx="40%" cy="40%" r="60%">
       <stop offset="0%" stop-color="#FFFBEB" />
-      <stop offset="35%" stop-color="#FCD34D" />
-      <stop offset="70%" stop-color="#F59E0B" />
-      <stop offset="100%" stop-color="#DC2626" />
+      <stop offset="30%" stop-color="#FCD34D" />
+      <stop offset="65%" stop-color="#F59E0B" />
+      <stop offset="100%" stop-color="#9F1239" />
     </radialGradient>
 
-    <!-- Single Notched Sakura Petal Definition -->
-    <path id="sakuraPetal" d="
-      M 0 0 
-      C -36 -35, -78 -90, -78 -145
-      C -78 -180, -48 -210, -18 -204
-      C -6 -202, 0 -188, 0 -188
-      C 0 -188, 6 -202, 18 -204
-      C 48 -210, 78 -180, 78 -145
-      C 78 -90, 36 -35, 0 0 Z
+    <radialGradient id="antherGrad" cx="35%" cy="35%" r="65%">
+      <stop offset="0%" stop-color="#FFFFFF" />
+      <stop offset="25%" stop-color="#FDE047" />
+      <stop offset="70%" stop-color="#F59E0B" />
+      <stop offset="100%" stop-color="#B45309" />
+    </radialGradient>
+
+    <!-- 3D Petal Shape with Notched Tip -->
+    <path id="sakuraPetal3D" d="
+      M 0 0
+      C -38 -35, -82 -92, -82 -148
+      C -82 -185, -50 -214, -20 -208
+      C -8 -206, 0 -192, 0 -192
+      C 0 -192, 8 -206, 20 -208
+      C 50 -214, 82 -185, 82 -148
+      C 82 -92, 38 -35, 0 0 Z
     " />
 
-    <filter id="shadowFilter" x="-20%" y="-20%" width="140%" height="140%">
-      <feDropShadow dx="0" dy="8" stdDeviation="12" flood-color="#000000" flood-opacity="0.5" />
+    <filter id="flower3DShadow" x="-30%" y="-30%" width="160%" height="160%">
+      <feDropShadow dx="0" dy="16" stdDeviation="18" flood-color="#000000" flood-opacity="0.65" />
+    </filter>
+
+    <filter id="text3DShadow" x="-20%" y="-20%" width="140%" height="140%">
+      <feDropShadow dx="0" dy="5" stdDeviation="6" flood-color="#000000" flood-opacity="0.8" />
     </filter>
   </defs>
 
-  <!-- Background Base with Rounded Corners -->
-  <rect x="8" y="8" width="496" height="496" rx="116" fill="url(#bgGrad)" stroke="url(#borderGrad)" stroke-width="4" />
+  <!-- 1. FULL BLEED SOLID BACKGROUND (No margin, no white border on macOS) -->
+  <rect width="512" height="512" fill="url(#obsidianGrad)" />
 
-  <!-- Ambient Glow Behind Flower -->
-  <circle cx="256" cy="225" r="170" fill="url(#auraGrad)" />
+  <!-- Top Specular Rim Light -->
+  <rect width="512" height="3" fill="url(#rimLight)" />
 
-  <!-- Sakura Blossom Group -->
-  <g transform="translate(256, 225)" filter="url(#shadowFilter)">
-    <!-- 5 Radial Petals (Angles: 0, 72, 144, 216, 288 deg, rotated -18deg for symmetry) -->
+  <!-- 2. Ambient Bloom -->
+  <circle cx="256" cy="216" r="210" fill="url(#bloomGrad)" />
+
+  <!-- 3. 3D Sakura Blossom Group -->
+  <g transform="translate(256, 216)" filter="url(#flower3DShadow)">
+    <!-- 5 Overlapping 3D Petals with Directional Lighting -->
     <g transform="rotate(-18)">
-      <use href="#sakuraPetal" fill="url(#petalGrad)" />
-      <use href="#sakuraPetal" fill="url(#petalHighlight)" />
+      <use href="#sakuraPetal3D" fill="url(#petal3DGrad)" />
+      <use href="#sakuraPetal3D" fill="url(#petalSpecGrad)" />
     </g>
     <g transform="rotate(54)">
-      <use href="#sakuraPetal" fill="url(#petalGrad)" />
-      <use href="#sakuraPetal" fill="url(#petalHighlight)" />
+      <use href="#sakuraPetal3D" fill="url(#petal3DGrad)" />
+      <use href="#sakuraPetal3D" fill="url(#petalSpecGrad)" />
     </g>
     <g transform="rotate(126)">
-      <use href="#sakuraPetal" fill="url(#petalGrad)" />
-      <use href="#sakuraPetal" fill="url(#petalHighlight)" />
+      <use href="#sakuraPetal3D" fill="url(#petal3DGrad)" />
+      <use href="#sakuraPetal3D" fill="url(#petalSpecGrad)" />
     </g>
     <g transform="rotate(198)">
-      <use href="#sakuraPetal" fill="url(#petalGrad)" />
-      <use href="#sakuraPetal" fill="url(#petalHighlight)" />
+      <use href="#sakuraPetal3D" fill="url(#petal3DGrad)" />
+      <use href="#sakuraPetal3D" fill="url(#petalSpecGrad)" />
     </g>
     <g transform="rotate(270)">
-      <use href="#sakuraPetal" fill="url(#petalGrad)" />
-      <use href="#sakuraPetal" fill="url(#petalHighlight)" />
+      <use href="#sakuraPetal3D" fill="url(#petal3DGrad)" />
+      <use href="#sakuraPetal3D" fill="url(#petalSpecGrad)" />
     </g>
 
-    <!-- Stamens and Golden Anthers -->
-    <!-- Stamen rays -->
-    <g stroke="#FCD34D" stroke-width="2.5" stroke-linecap="round" opacity="0.9">
-      <!-- 10 radial stamens -->
-      <line x1="0" y1="0" x2="0" y2="-45" />
-      <line x1="0" y1="0" x2="26" y2="-36" />
-      <line x1="0" y1="0" x2="42" y2="-14" />
-      <line x1="0" y1="0" x2="42" y2="14" />
-      <line x1="0" y1="0" x2="26" y2="36" />
-      <line x1="0" y1="0" x2="0" y2="45" />
-      <line x1="0" y1="0" x2="-26" y2="36" />
-      <line x1="0" y1="0" x2="-42" y2="14" />
-      <line x1="0" y1="0" x2="-42" y2="-14" />
-      <line x1="0" y1="0" x2="-26" y2="-36" />
+    <!-- 3D Golden Stamens & Pearls -->
+    <g stroke="#F59E0B" stroke-width="3" stroke-linecap="round" opacity="0.95">
+      <line x1="0" y1="0" x2="0" y2="-48" />
+      <line x1="0" y1="0" x2="25" y2="-41" />
+      <line x1="0" y1="0" x2="42" y2="-24" />
+      <line x1="0" y1="0" x2="48" y2="0" />
+      <line x1="0" y1="0" x2="42" y2="24" />
+      <line x1="0" y1="0" x2="25" y2="41" />
+      <line x1="0" y1="0" x2="0" y2="48" />
+      <line x1="0" y1="0" x2="-25" y2="41" />
+      <line x1="0" y1="0" x2="-42" y2="24" />
+      <line x1="0" y1="0" x2="-48" y2="0" />
+      <line x1="0" y1="0" x2="-42" y2="-24" />
+      <line x1="0" y1="0" x2="-25" y2="-41" />
     </g>
 
-    <!-- Golden Anther dots -->
-    <g fill="#FDE047" stroke="#F59E0B" stroke-width="1.5">
-      <circle cx="0" cy="-45" r="5" />
-      <circle cx="26" cy="-36" r="5" />
-      <circle cx="42" cy="-14" r="5" />
-      <circle cx="42" cy="14" r="5" />
-      <circle cx="26" cy="36" r="5" />
-      <circle cx="0" cy="45" r="5" />
-      <circle cx="-26" cy="36" r="5" />
-      <circle cx="-42" cy="14" r="5" />
-      <circle cx="-42" cy="-14" r="5" />
-      <circle cx="-26" cy="-36" r="5" />
-    </g>
+    <!-- 3D Spherical Anther Pearls -->
+    <circle cx="0" cy="-48" r="7" fill="url(#antherGrad)" />
+    <circle cx="25" cy="-41" r="7" fill="url(#antherGrad)" />
+    <circle cx="42" cy="-24" r="7" fill="url(#antherGrad)" />
+    <circle cx="48" cy="0" r="7" fill="url(#antherGrad)" />
+    <circle cx="42" cy="24" r="7" fill="url(#antherGrad)" />
+    <circle cx="25" cy="41" r="7" fill="url(#antherGrad)" />
+    <circle cx="0" cy="48" r="7" fill="url(#antherGrad)" />
+    <circle cx="-25" cy="41" r="7" fill="url(#antherGrad)" />
+    <circle cx="-42" cy="24" r="7" fill="url(#antherGrad)" />
+    <circle cx="-48" cy="0" r="7" fill="url(#antherGrad)" />
+    <circle cx="-42" cy="-24" r="7" fill="url(#antherGrad)" />
+    <circle cx="-25" cy="-41" r="7" fill="url(#antherGrad)" />
 
-    <!-- Central Pistil Star Core -->
-    <circle cx="0" cy="0" r="22" fill="url(#coreGrad)" />
-    <circle cx="0" cy="0" r="10" fill="#FFFBEB" opacity="0.95" />
+    <!-- 3D Center Jewel Dome -->
+    <circle cx="0" cy="0" r="26" fill="url(#pistilGrad)" stroke="#B45309" stroke-width="2" />
+    <circle cx="-3" cy="-3" r="10" fill="#FFFBEB" opacity="0.9" />
   </g>
 
-  <!-- Typography: SWASTI AI -->
-  <g text-anchor="middle">
-    <!-- Main text 'Swasti AI' -->
+  <!-- 4. 3D Embossed Typography -->
+  <g text-anchor="middle" filter="url(#text3DShadow)">
     <text 
       x="256" 
-      y="435" 
-      font-family="-apple-system, BlinkMacSystemFont, 'Plus Jakarta Sans', 'Outfit', 'Segoe UI', Roboto, sans-serif" 
-      font-size="44" 
-      font-weight="800" 
-      letter-spacing="5" 
+      y="428" 
+      font-family="-apple-system, BlinkMacSystemFont, 'Plus Jakarta Sans', 'Outfit', 'SF Pro Display', sans-serif" 
+      font-size="46" 
+      font-weight="900" 
+      letter-spacing="6" 
       fill="#F7F5EF"
     >SWASTI AI</text>
 
-    <!-- Subtle Subtitle/Accent -->
     <text 
       x="256" 
-      y="464" 
-      font-family="-apple-system, BlinkMacSystemFont, 'Plus Jakarta Sans', sans-serif" 
-      font-size="14" 
-      font-weight="700" 
-      letter-spacing="6" 
+      y="460" 
+      font-family="-apple-system, BlinkMacSystemFont, 'Plus Jakarta Sans', 'Outfit', sans-serif" 
+      font-size="15" 
+      font-weight="800" 
+      letter-spacing="7" 
       fill="#9CAF88" 
-      opacity="0.9"
+      opacity="0.95"
     >VOICE &amp; CHAT</text>
   </g>
 </svg>"""
@@ -165,142 +424,14 @@ def create_icons():
     svg_path = os.path.join(output_dir, "favicon.svg")
     with open(svg_path, "w", encoding="utf-8") as f:
         f.write(svg_content)
-    print(f"Wrote master SVG: {svg_path}")
+    print(f"Wrote full-bleed 3D master SVG: {svg_path}")
 
-    # 2. Render High-Resolution Raster Icons with Pillow using 4x supersampling for flawless quality
-    render_size = 2048
-    scale = render_size / 512.0
-
-    img = Image.new("RGBA", (render_size, render_size), (0, 0, 0, 0))
-    draw = ImageDraw.Draw(img)
-
-    # Background rounded rectangle
-    # Radius = 116 * scale = 464
-    rx = int(116 * scale)
-    pad = int(8 * scale)
-    rect_box = [pad, pad, render_size - pad, render_size - pad]
-
-    # Draw dark background
-    draw.rounded_rectangle(rect_box, radius=rx, fill=(18, 19, 28, 255), outline=(156, 175, 136, 100), width=int(5 * scale))
-
-    # Draw radial glow in center
-    cx, cy = int(256 * scale), int(225 * scale)
-    glow_radius = int(180 * scale)
-    glow_img = Image.new("RGBA", (render_size, render_size), (0, 0, 0, 0))
-    glow_draw = ImageDraw.Draw(glow_img)
-    for r in range(glow_radius, 0, -int(4 * scale)):
-        alpha = int(45 * (1.0 - r / glow_radius))
-        glow_draw.ellipse([cx - r, cy - r, cx + r, cy + r], fill=(255, 141, 161, alpha))
-    glow_img = glow_img.filter(ImageFilter.GaussianBlur(radius=int(25 * scale)))
-    img = Image.alpha_composite(img, glow_img)
-    draw = ImageDraw.Draw(img)
-
-    # Draw 5 Petals of Sakura
-    petal_len = 195 * scale
-    petal_half_w = 78 * scale
-
-    for i in range(5):
-        angle_deg = -18 + i * 72
-        angle_rad = math.radians(angle_deg)
-        cos_a = math.cos(angle_rad)
-        sin_a = math.sin(angle_rad)
-
-        # Generate smooth points for each petal
-        petal_pts = []
-        # Center to tip left curve, notch, tip right curve back to center
-        # We sample parametric curve for exquisite notch detail
-        # Left side
-        for t in range(0, 101, 5):
-            frac = t / 100.0
-            # Width widens then tapers to notch
-            w = -petal_half_w * math.sin(frac * math.pi * 0.85)
-            h = -petal_len * frac
-            # Notch at the tip (frac near 1.0)
-            if frac > 0.85:
-                notch_depth = (frac - 0.85) / 0.15
-                w *= (1.0 - notch_depth * 0.25)
-            # Rotate by angle
-            px = cx + (w * cos_a - h * sin_a)
-            py = cy + (w * sin_a + h * cos_a)
-            petal_pts.append((px, py))
-
-        # Notch point in middle
-        notch_h = -petal_len * 0.90
-        petal_pts.append((cx - notch_h * sin_a, cy + notch_h * cos_a))
-
-        # Right side
-        for t in range(100, -1, -5):
-            frac = t / 100.0
-            w = petal_half_w * math.sin(frac * math.pi * 0.85)
-            h = -petal_len * frac
-            if frac > 0.85:
-                notch_depth = (frac - 0.85) / 0.15
-                w *= (1.0 - notch_depth * 0.25)
-            px = cx + (w * cos_a - h * sin_a)
-            py = cy + (w * sin_a + h * cos_a)
-            petal_pts.append((px, py))
-
-        # Fill petal with gradient or solid smooth vibrant coral-rose
-        draw.polygon(petal_pts, fill=(244, 63, 94, 250), outline=(255, 175, 190, 240))
-
-        # Inner lighter lobe highlight
-        inner_pts = []
-        for (px, py) in petal_pts:
-            ix = cx + (px - cx) * 0.82
-            iy = cy + (py - cy) * 0.82
-            inner_pts.append((ix, iy))
-        draw.polygon(inner_pts, fill=(255, 140, 160, 180))
-
-    # Stamens and golden anthers
-    num_stamens = 10
-    stamen_len = 50 * scale
-    for j in range(num_stamens):
-        s_angle = math.radians(j * (360 / num_stamens))
-        sx = cx + math.cos(s_angle) * stamen_len
-        sy = cy + math.sin(s_angle) * stamen_len
-        draw.line([cx, cy, sx, sy], fill=(252, 211, 77, 240), width=int(4 * scale))
-        anther_r = int(7 * scale)
-        draw.ellipse([sx - anther_r, sy - anther_r, sx + anther_r, sy + anther_r], fill=(253, 224, 71, 255), outline=(245, 158, 11, 255), width=int(2 * scale))
-
-    # Core center pistil
-    core_r = int(24 * scale)
-    draw.ellipse([cx - core_r, cy - core_r, cx + core_r, cy + core_r], fill=(220, 38, 38, 255), outline=(245, 158, 11, 255), width=int(3 * scale))
-    draw.ellipse([cx - core_r//2, cy - core_r//2, cx + core_r//2, cy + core_r//2], fill=(255, 251, 235, 255))
-
-    # Typography: SWASTI AI
-    # Try finding font
-    font_path = "/System/Library/Fonts/Supplemental/Arial Bold.ttf"
-    if not os.path.exists(font_path):
-        font_path = "/System/Library/Fonts/Helvetica.ttc"
-
-    try:
-        font_main = ImageFont.truetype(font_path, int(46 * scale))
-        font_sub = ImageFont.truetype(font_path, int(15 * scale))
-    except Exception:
-        font_main = ImageFont.load_default()
-        font_sub = ImageFont.load_default()
-
-    # Draw "SWASTI AI" text with letter spacing
-    text_main = "SWASTI AI"
-    # Measure
-    bbox = draw.textbbox((0, 0), text_main, font=font_main)
-    w_text = bbox[2] - bbox[0]
-    tx = (render_size - w_text) // 2
-    ty = int(405 * scale)
-    draw.text((tx, ty), text_main, font=font_main, fill=(247, 245, 239, 255))
-
-    # Draw subtitle "VOICE & CHAT"
-    text_sub = "VOICE & CHAT"
-    bbox_sub = draw.textbbox((0, 0), text_sub, font=font_sub)
-    w_sub = bbox_sub[2] - bbox_sub[0]
-    sx = (render_size - w_sub) // 2
-    sy = int(452 * scale)
-    draw.text((sx, sy), text_sub, font=font_sub, fill=(156, 175, 136, 230))
-
-    # 3. Export PNG targets with LANCZOS downsampling for supreme crispness
-    sizes = {
+    # 6. EXPORT ALL PLATFORM PNG TARGETS (ALL FULL BLEED SOLID 100% OPAQUE)
+    # Using Lanczos downsampling from 2048x2048 to produce crisp, anti-aliased luxury icons
+    targets = {
         "pwa-512x512.png": (512, 512),
         "pwa-192x192.png": (192, 192),
+        "maskable-icon-512x512.png": (512, 512),
         "apple-touch-icon.png": (180, 180),
         "apple-touch-icon-180x180.png": (180, 180),
         "apple-touch-icon-152x152.png": (152, 152),
@@ -309,27 +440,29 @@ def create_icons():
         "favicon-16x16.png": (16, 16)
     }
 
-    for filename, (w, h) in sizes.items():
-        resized = img.resize((w, h), Image.Resampling.LANCZOS)
-        out_path = os.path.join(output_dir, filename)
-        resized.save(out_path, "PNG", optimize=True)
-        print(f"Generated icon: {out_path} ({w}x{h})")
+    # Convert to RGB (completely opaque, no alpha channel) for apple-touch-icon and pwa icons
+    # Apple HIG explicitly specifies: "Do not use transparency in your app icon"
+    rgb_img = img.convert("RGB")
 
-    # Maskable Icon with safe margins (40% inner padding so Android adaptive icons never crop)
-    maskable_size = 512
-    maskable_img = Image.new("RGBA", (maskable_size, maskable_size), (18, 19, 28, 255))
-    inner = img.resize((int(maskable_size * 0.8), int(maskable_size * 0.8)), Image.Resampling.LANCZOS)
-    offset = int(maskable_size * 0.1)
-    maskable_img.paste(inner, (offset, offset), inner)
-    maskable_path = os.path.join(output_dir, "maskable-icon-512x512.png")
-    maskable_img.save(maskable_path, "PNG", optimize=True)
-    print(f"Generated maskable icon: {maskable_path}")
+    for filename, (tw, th) in targets.items():
+        # Maskable icon gets a slightly scaled flower with full bleed background
+        if filename.startswith("maskable"):
+            # Resize full-bleed RGB
+            m_icon = rgb_img.resize((tw, th), Image.Resampling.LANCZOS)
+            out_p = os.path.join(output_dir, filename)
+            m_icon.save(out_p, "PNG", optimize=True)
+            print(f"Saved: {out_p} ({tw}x{th})")
+        else:
+            resized = rgb_img.resize((tw, th), Image.Resampling.LANCZOS)
+            out_p = os.path.join(output_dir, filename)
+            resized.save(out_p, "PNG", optimize=True)
+            print(f"Saved: {out_p} ({tw}x{th})")
 
-    # Favicon .ico
+    # Multi-size Favicon .ico
     ico_path = os.path.join(output_dir, "favicon.ico")
-    ico_img = img.resize((64, 64), Image.Resampling.LANCZOS)
+    ico_img = rgb_img.resize((64, 64), Image.Resampling.LANCZOS)
     ico_img.save(ico_path, format="ICO", sizes=[(16, 16), (32, 32), (48, 48), (64, 64)])
-    print(f"Generated favicon.ico: {ico_path}")
+    print(f"Saved: {ico_path}")
 
 if __name__ == "__main__":
-    create_icons()
+    generate_3d_icons()

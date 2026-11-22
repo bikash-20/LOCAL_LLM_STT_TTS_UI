@@ -1,152 +1,166 @@
 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512" width="512" height="512">
   <defs>
-    <!-- Background Gradient -->
-    <linearGradient id="bgGrad" x1="0%" y1="0%" x2="100%" y2="100%">
-      <stop offset="0%" stop-color="#141522" />
-      <stop offset="100%" stop-color="#0E0F16" />
+    <!-- Solid Full Bleed 3D Obsidian Gradient -->
+    <linearGradient id="obsidianGrad" x1="0%" y1="0%" x2="0%" y2="100%">
+      <stop offset="0%" stop-color="#18192A" />
+      <stop offset="50%" stop-color="#12131F" />
+      <stop offset="100%" stop-color="#0B0C13" />
     </linearGradient>
 
-    <!-- Outer Border Subtle Glow -->
-    <linearGradient id="borderGrad" x1="0%" y1="0%" x2="100%" y2="100%">
-      <stop offset="0%" stop-color="#9CAF88" stop-opacity="0.4" />
-      <stop offset="50%" stop-color="#E8412C" stop-opacity="0.3" />
-      <stop offset="100%" stop-color="#FF8DA1" stop-opacity="0.5" />
+    <!-- Top Specular Rim Light -->
+    <linearGradient id="rimLight" x1="0%" y1="0%" x2="100%" y2="0%">
+      <stop offset="0%" stop-color="#FFFFFF" stop-opacity="0.05" />
+      <stop offset="50%" stop-color="#FFFFFF" stop-opacity="0.35" />
+      <stop offset="100%" stop-color="#FFFFFF" stop-opacity="0.05" />
     </linearGradient>
 
-    <!-- Ambient Aura -->
-    <radialGradient id="auraGrad" cx="50%" cy="44%" r="40%">
-      <stop offset="0%" stop-color="#FF8DA1" stop-opacity="0.25" />
-      <stop offset="50%" stop-color="#E8412C" stop-opacity="0.12" />
-      <stop offset="100%" stop-color="#141522" stop-opacity="0" />
+    <!-- Ambient Blossom Glow -->
+    <radialGradient id="bloomGrad" cx="50%" cy="42%" r="45%">
+      <stop offset="0%" stop-color="#FF5B79" stop-opacity="0.35" />
+      <stop offset="50%" stop-color="#E11D48" stop-opacity="0.15" />
+      <stop offset="100%" stop-color="#12131F" stop-opacity="0" />
     </radialGradient>
 
-    <!-- Sakura Petal Gradient -->
-    <linearGradient id="petalGrad" x1="0%" y1="100%" x2="0%" y2="0%">
-      <stop offset="0%" stop-color="#E8412C" />
-      <stop offset="40%" stop-color="#F43F5E" />
-      <stop offset="85%" stop-color="#FFA8BA" />
-      <stop offset="100%" stop-color="#FFE4E8" />
+    <!-- 3D Petal Gradient -->
+    <linearGradient id="petal3DGrad" x1="20%" y1="100%" x2="50%" y2="0%">
+      <stop offset="0%" stop-color="#BE123C" />
+      <stop offset="25%" stop-color="#E11D48" />
+      <stop offset="70%" stop-color="#FB7185" />
+      <stop offset="90%" stop-color="#FDA4AF" />
+      <stop offset="100%" stop-color="#FFF1F2" />
     </linearGradient>
 
-    <!-- Petal Highlight Overlay -->
-    <linearGradient id="petalHighlight" x1="0%" y1="100%" x2="0%" y2="0%">
-      <stop offset="0%" stop-color="#FFFFFF" stop-opacity="0" />
-      <stop offset="80%" stop-color="#FFFFFF" stop-opacity="0.25" />
-      <stop offset="100%" stop-color="#FFFFFF" stop-opacity="0.6" />
+    <!-- Petal Specular Highlight -->
+    <linearGradient id="petalSpecGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#FFFFFF" stop-opacity="0.55" />
+      <stop offset="40%" stop-color="#FFFFFF" stop-opacity="0.15" />
+      <stop offset="100%" stop-color="#FFFFFF" stop-opacity="0" />
     </linearGradient>
 
-    <!-- Center Radiant Core -->
-    <radialGradient id="coreGrad" cx="50%" cy="50%" r="50%">
+    <!-- 3D Center Core -->
+    <radialGradient id="pistilGrad" cx="40%" cy="40%" r="60%">
       <stop offset="0%" stop-color="#FFFBEB" />
-      <stop offset="35%" stop-color="#FCD34D" />
-      <stop offset="70%" stop-color="#F59E0B" />
-      <stop offset="100%" stop-color="#DC2626" />
+      <stop offset="30%" stop-color="#FCD34D" />
+      <stop offset="65%" stop-color="#F59E0B" />
+      <stop offset="100%" stop-color="#9F1239" />
     </radialGradient>
 
-    <!-- Single Notched Sakura Petal Definition -->
-    <path id="sakuraPetal" d="
-      M 0 0 
-      C -36 -35, -78 -90, -78 -145
-      C -78 -180, -48 -210, -18 -204
-      C -6 -202, 0 -188, 0 -188
-      C 0 -188, 6 -202, 18 -204
-      C 48 -210, 78 -180, 78 -145
-      C 78 -90, 36 -35, 0 0 Z
+    <radialGradient id="antherGrad" cx="35%" cy="35%" r="65%">
+      <stop offset="0%" stop-color="#FFFFFF" />
+      <stop offset="25%" stop-color="#FDE047" />
+      <stop offset="70%" stop-color="#F59E0B" />
+      <stop offset="100%" stop-color="#B45309" />
+    </radialGradient>
+
+    <!-- 3D Petal Shape with Notched Tip -->
+    <path id="sakuraPetal3D" d="
+      M 0 0
+      C -38 -35, -82 -92, -82 -148
+      C -82 -185, -50 -214, -20 -208
+      C -8 -206, 0 -192, 0 -192
+      C 0 -192, 8 -206, 20 -208
+      C 50 -214, 82 -185, 82 -148
+      C 82 -92, 38 -35, 0 0 Z
     " />
 
-    <filter id="shadowFilter" x="-20%" y="-20%" width="140%" height="140%">
-      <feDropShadow dx="0" dy="8" stdDeviation="12" flood-color="#000000" flood-opacity="0.5" />
+    <filter id="flower3DShadow" x="-30%" y="-30%" width="160%" height="160%">
+      <feDropShadow dx="0" dy="16" stdDeviation="18" flood-color="#000000" flood-opacity="0.65" />
+    </filter>
+
+    <filter id="text3DShadow" x="-20%" y="-20%" width="140%" height="140%">
+      <feDropShadow dx="0" dy="5" stdDeviation="6" flood-color="#000000" flood-opacity="0.8" />
     </filter>
   </defs>
 
-  <!-- Background Base with Rounded Corners -->
-  <rect x="8" y="8" width="496" height="496" rx="116" fill="url(#bgGrad)" stroke="url(#borderGrad)" stroke-width="4" />
+  <!-- 1. FULL BLEED SOLID BACKGROUND (No margin, no white border on macOS) -->
+  <rect width="512" height="512" fill="url(#obsidianGrad)" />
 
-  <!-- Ambient Glow Behind Flower -->
-  <circle cx="256" cy="225" r="170" fill="url(#auraGrad)" />
+  <!-- Top Specular Rim Light -->
+  <rect width="512" height="3" fill="url(#rimLight)" />
 
-  <!-- Sakura Blossom Group -->
-  <g transform="translate(256, 225)" filter="url(#shadowFilter)">
-    <!-- 5 Radial Petals (Angles: 0, 72, 144, 216, 288 deg, rotated -18deg for symmetry) -->
+  <!-- 2. Ambient Bloom -->
+  <circle cx="256" cy="216" r="210" fill="url(#bloomGrad)" />
+
+  <!-- 3. 3D Sakura Blossom Group -->
+  <g transform="translate(256, 216)" filter="url(#flower3DShadow)">
+    <!-- 5 Overlapping 3D Petals with Directional Lighting -->
     <g transform="rotate(-18)">
-      <use href="#sakuraPetal" fill="url(#petalGrad)" />
-      <use href="#sakuraPetal" fill="url(#petalHighlight)" />
+      <use href="#sakuraPetal3D" fill="url(#petal3DGrad)" />
+      <use href="#sakuraPetal3D" fill="url(#petalSpecGrad)" />
     </g>
     <g transform="rotate(54)">
-      <use href="#sakuraPetal" fill="url(#petalGrad)" />
-      <use href="#sakuraPetal" fill="url(#petalHighlight)" />
+      <use href="#sakuraPetal3D" fill="url(#petal3DGrad)" />
+      <use href="#sakuraPetal3D" fill="url(#petalSpecGrad)" />
     </g>
     <g transform="rotate(126)">
-      <use href="#sakuraPetal" fill="url(#petalGrad)" />
-      <use href="#sakuraPetal" fill="url(#petalHighlight)" />
+      <use href="#sakuraPetal3D" fill="url(#petal3DGrad)" />
+      <use href="#sakuraPetal3D" fill="url(#petalSpecGrad)" />
     </g>
     <g transform="rotate(198)">
-      <use href="#sakuraPetal" fill="url(#petalGrad)" />
-      <use href="#sakuraPetal" fill="url(#petalHighlight)" />
+      <use href="#sakuraPetal3D" fill="url(#petal3DGrad)" />
+      <use href="#sakuraPetal3D" fill="url(#petalSpecGrad)" />
     </g>
     <g transform="rotate(270)">
-      <use href="#sakuraPetal" fill="url(#petalGrad)" />
-      <use href="#sakuraPetal" fill="url(#petalHighlight)" />
+      <use href="#sakuraPetal3D" fill="url(#petal3DGrad)" />
+      <use href="#sakuraPetal3D" fill="url(#petalSpecGrad)" />
     </g>
 
-    <!-- Stamens and Golden Anthers -->
-    <!-- Stamen rays -->
-    <g stroke="#FCD34D" stroke-width="2.5" stroke-linecap="round" opacity="0.9">
-      <!-- 10 radial stamens -->
-      <line x1="0" y1="0" x2="0" y2="-45" />
-      <line x1="0" y1="0" x2="26" y2="-36" />
-      <line x1="0" y1="0" x2="42" y2="-14" />
-      <line x1="0" y1="0" x2="42" y2="14" />
-      <line x1="0" y1="0" x2="26" y2="36" />
-      <line x1="0" y1="0" x2="0" y2="45" />
-      <line x1="0" y1="0" x2="-26" y2="36" />
-      <line x1="0" y1="0" x2="-42" y2="14" />
-      <line x1="0" y1="0" x2="-42" y2="-14" />
-      <line x1="0" y1="0" x2="-26" y2="-36" />
+    <!-- 3D Golden Stamens & Pearls -->
+    <g stroke="#F59E0B" stroke-width="3" stroke-linecap="round" opacity="0.95">
+      <line x1="0" y1="0" x2="0" y2="-48" />
+      <line x1="0" y1="0" x2="25" y2="-41" />
+      <line x1="0" y1="0" x2="42" y2="-24" />
+      <line x1="0" y1="0" x2="48" y2="0" />
+      <line x1="0" y1="0" x2="42" y2="24" />
+      <line x1="0" y1="0" x2="25" y2="41" />
+      <line x1="0" y1="0" x2="0" y2="48" />
+      <line x1="0" y1="0" x2="-25" y2="41" />
+      <line x1="0" y1="0" x2="-42" y2="24" />
+      <line x1="0" y1="0" x2="-48" y2="0" />
+      <line x1="0" y1="0" x2="-42" y2="-24" />
+      <line x1="0" y1="0" x2="-25" y2="-41" />
     </g>
 
-    <!-- Golden Anther dots -->
-    <g fill="#FDE047" stroke="#F59E0B" stroke-width="1.5">
-      <circle cx="0" cy="-45" r="5" />
-      <circle cx="26" cy="-36" r="5" />
-      <circle cx="42" cy="-14" r="5" />
-      <circle cx="42" cy="14" r="5" />
-      <circle cx="26" cy="36" r="5" />
-      <circle cx="0" cy="45" r="5" />
-      <circle cx="-26" cy="36" r="5" />
-      <circle cx="-42" cy="14" r="5" />
-      <circle cx="-42" cy="-14" r="5" />
-      <circle cx="-26" cy="-36" r="5" />
-    </g>
+    <!-- 3D Spherical Anther Pearls -->
+    <circle cx="0" cy="-48" r="7" fill="url(#antherGrad)" />
+    <circle cx="25" cy="-41" r="7" fill="url(#antherGrad)" />
+    <circle cx="42" cy="-24" r="7" fill="url(#antherGrad)" />
+    <circle cx="48" cy="0" r="7" fill="url(#antherGrad)" />
+    <circle cx="42" cy="24" r="7" fill="url(#antherGrad)" />
+    <circle cx="25" cy="41" r="7" fill="url(#antherGrad)" />
+    <circle cx="0" cy="48" r="7" fill="url(#antherGrad)" />
+    <circle cx="-25" cy="41" r="7" fill="url(#antherGrad)" />
+    <circle cx="-42" cy="24" r="7" fill="url(#antherGrad)" />
+    <circle cx="-48" cy="0" r="7" fill="url(#antherGrad)" />
+    <circle cx="-42" cy="-24" r="7" fill="url(#antherGrad)" />
+    <circle cx="-25" cy="-41" r="7" fill="url(#antherGrad)" />
 
-    <!-- Central Pistil Star Core -->
-    <circle cx="0" cy="0" r="22" fill="url(#coreGrad)" />
-    <circle cx="0" cy="0" r="10" fill="#FFFBEB" opacity="0.95" />
+    <!-- 3D Center Jewel Dome -->
+    <circle cx="0" cy="0" r="26" fill="url(#pistilGrad)" stroke="#B45309" stroke-width="2" />
+    <circle cx="-3" cy="-3" r="10" fill="#FFFBEB" opacity="0.9" />
   </g>
 
-  <!-- Typography: SWASTI AI -->
-  <g text-anchor="middle">
-    <!-- Main text 'Swasti AI' -->
+  <!-- 4. 3D Embossed Typography -->
+  <g text-anchor="middle" filter="url(#text3DShadow)">
     <text 
       x="256" 
-      y="435" 
-      font-family="-apple-system, BlinkMacSystemFont, 'Plus Jakarta Sans', 'Outfit', 'Segoe UI', Roboto, sans-serif" 
-      font-size="44" 
-      font-weight="800" 
-      letter-spacing="5" 
+      y="428" 
+      font-family="-apple-system, BlinkMacSystemFont, 'Plus Jakarta Sans', 'Outfit', 'SF Pro Display', sans-serif" 
+      font-size="46" 
+      font-weight="900" 
+      letter-spacing="6" 
       fill="#F7F5EF"
     >SWASTI AI</text>
 
-    <!-- Subtle Subtitle/Accent -->
     <text 
       x="256" 
-      y="464" 
-      font-family="-apple-system, BlinkMacSystemFont, 'Plus Jakarta Sans', sans-serif" 
-      font-size="14" 
-      font-weight="700" 
-      letter-spacing="6" 
+      y="460" 
+      font-family="-apple-system, BlinkMacSystemFont, 'Plus Jakarta Sans', 'Outfit', sans-serif" 
+      font-size="15" 
+      font-weight="800" 
+      letter-spacing="7" 
       fill="#9CAF88" 
-      opacity="0.9"
+      opacity="0.95"
     >VOICE &amp; CHAT</text>
   </g>
 </svg>
