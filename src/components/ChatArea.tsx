@@ -1,6 +1,7 @@
 import React, { useState, useRef, useEffect } from 'react';
 import { ChatSession, VoiceConfig, OllamaConfig } from '../types';
 import { MessageItem } from './MessageItem';
+import { InstallBanner } from './InstallBanner';
 import {
   Send,
   Mic,
@@ -209,6 +210,9 @@ export const ChatArea: React.FC<ChatAreaProps> = ({
           </button>
         </div>
       </header>
+
+      {/* PWA Install Recommendation Banner */}
+      <InstallBanner />
 
       {/* Messages Scroll View */}
       <div className="flex-1 overflow-y-auto">

@@ -198,12 +198,21 @@ Visit **http://localhost:5173** in Google Chrome or any modern browser.
 
 ---
 
-## 📱 Progressive Web App (PWA)
+## 📱 Progressive Web App (PWA) & Native Installation
 
-Swasti 🌸 is fully installable as an offline Progressive Web App:
-- Open in Google Chrome, Edge, or Safari.
-- Click the **Install** button in your browser address bar.
-- Launch Swasti 🌸 as a standalone desktop or mobile application.
+Swasti 🌸 is fully installable as an offline Progressive Web App with cross-platform icon support (Mac, iOS, Android, and Windows):
+- **Smart Install Recommendation Banner**: Intelligently recommends installation when visiting the app, with 1-click prompt on Chromium/Android and step-by-step guidance for iOS Safari and macOS Sonoma.
+- **Cross-Platform Vector & Raster Icons**: Features the sakura flower 🌸 with the **Swasti AI** brand typography across `favicon.svg`, `pwa-192x192.png`, `pwa-512x512.png`, and `apple-touch-icon.png`.
+- **Offline Service Worker**: Instant offline loading and caching for standalone app performance.
+
+---
+
+## ⚡ 1-Click Vercel Deployment
+
+Swasti 🌸 is pre-configured with `vercel.json` for seamless continuous deployment:
+- **Instant CI/CD**: Every push to GitHub triggers an automatic production build and deployment on Vercel.
+- **SPA Routing**: Full client-side rewrite handling for `/index.html`.
+- **Security & Cache Headers**: Includes strict origin and immutable asset caching for maximum web performance.
 
 ---
 
