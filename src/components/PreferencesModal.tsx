@@ -20,17 +20,17 @@ interface PreferencesModalProps {
 }
 
 const SWASTI_VOICE_PROFILES: VoiceOption[] = [
-  { id: 'af_heart', name: 'Swasti 🌸 Natural (Recommended)', gender: 'Female', accent: 'American', desc: 'Warm, ultra-natural, human-like cadence', recommended: true },
-  { id: 'af_bella', name: 'Swasti 🌸 Expressive', gender: 'Female', accent: 'American', desc: 'Clear, lively, friendly' },
-  { id: 'af_nicole', name: 'Swasti 🌸 Thoughtful', gender: 'Female', accent: 'American', desc: 'Calm, poised, intelligent' },
-  { id: 'af_sarah', name: 'Swasti 🌸 Modern', gender: 'Female', accent: 'American', desc: 'Casual, upbeat, modern' },
-  { id: 'af_sky', name: 'Swasti 🌸 Gentle', gender: 'Female', accent: 'American', desc: 'Airy, soft, pleasant' },
-  { id: 'bf_emma', name: 'Swasti 🌸 British Warm (Recommended)', gender: 'Female', accent: 'British', desc: 'Sophisticated, warm British accent', recommended: true },
-  { id: 'bf_isabella', name: 'Swasti 🌸 British Crisp', gender: 'Female', accent: 'British', desc: 'Crisp, elegant, refined' },
-  { id: 'bf_alice', name: 'Swasti 🌸 British Delicate', gender: 'Female', accent: 'British', desc: 'Delicate, poised' },
-  { id: 'am_adam', name: 'Swasti 🌸 Baritone (Deep)', gender: 'Male', accent: 'American', desc: 'Authoritative, deep, balanced', recommended: true },
-  { id: 'am_michael', name: 'Swasti 🌸 Articulate', gender: 'Male', accent: 'American', desc: 'Energetic, articulate, engaging' },
-  { id: 'bm_george', name: 'Swasti 🌸 Distinguished', gender: 'Male', accent: 'British', desc: 'Scholarly, distinguished British' }
+  { id: 'af_heart', name: 'Swasti Natural (Recommended)', gender: 'Female', accent: 'American', desc: 'Warm, ultra-natural, human-like cadence', recommended: true },
+  { id: 'af_bella', name: 'Swasti Expressive', gender: 'Female', accent: 'American', desc: 'Clear, lively, friendly' },
+  { id: 'af_nicole', name: 'Swasti Thoughtful', gender: 'Female', accent: 'American', desc: 'Calm, poised, intelligent' },
+  { id: 'af_sarah', name: 'Swasti Modern', gender: 'Female', accent: 'American', desc: 'Casual, upbeat, modern' },
+  { id: 'af_sky', name: 'Swasti Gentle', gender: 'Female', accent: 'American', desc: 'Airy, soft, pleasant' },
+  { id: 'bf_emma', name: 'Swasti British Warm (Recommended)', gender: 'Female', accent: 'British', desc: 'Sophisticated, warm British accent', recommended: true },
+  { id: 'bf_isabella', name: 'Swasti British Crisp', gender: 'Female', accent: 'British', desc: 'Crisp, elegant, refined' },
+  { id: 'bf_alice', name: 'Swasti British Delicate', gender: 'Female', accent: 'British', desc: 'Delicate, poised' },
+  { id: 'am_adam', name: 'Swasti Baritone (Deep)', gender: 'Male', accent: 'American', desc: 'Authoritative, deep, balanced', recommended: true },
+  { id: 'am_michael', name: 'Swasti Articulate', gender: 'Male', accent: 'American', desc: 'Energetic, articulate, engaging' },
+  { id: 'bm_george', name: 'Swasti Distinguished', gender: 'Male', accent: 'British', desc: 'Scholarly, distinguished British' }
 ];
 
 export const PreferencesModal: React.FC<PreferencesModalProps> = ({
@@ -185,9 +185,9 @@ export const PreferencesModal: React.FC<PreferencesModalProps> = ({
   return (
     <div className="fixed inset-0 z-50 bg-black/75 backdrop-blur-sm flex items-center justify-center p-4 sm:p-6 animate-fadeIn">
       <div
-        className="w-full max-w-2xl rounded-2xl shadow-2xl overflow-hidden flex flex-col max-h-[90vh] border"
+        className="w-full max-w-2xl rounded-2xl shadow-2xl overflow-hidden flex flex-col max-h-[90vh] border backdrop-blur-2xl"
         style={{
-          backgroundColor: 'var(--card-bg)',
+          backgroundColor: 'var(--modal-bg, var(--card-bg))',
           borderColor: 'var(--border-color)',
           color: 'var(--text-primary)'
         }}
@@ -199,7 +199,7 @@ export const PreferencesModal: React.FC<PreferencesModalProps> = ({
               <span>Preferences</span>
             </h2>
             <p className="text-[13.5px] sm:text-[14px] mt-1" style={{ color: 'var(--text-muted)' }}>
-              Tune the connection and behavior of your local model • Developed by Bikash Talukder
+              Tune the connection and behavior of your local model
             </p>
           </div>
           <button
@@ -236,7 +236,7 @@ export const PreferencesModal: React.FC<PreferencesModalProps> = ({
             style={{ color: activeTab === 'voice' ? 'var(--c1)' : 'var(--text-muted)' }}
           >
             <Volume2 className="w-4.5 h-4.5" />
-            <span>Swasti 🌸 Voice</span>
+            <span>Voice</span>
           </button>
 
           <button
@@ -407,7 +407,7 @@ export const PreferencesModal: React.FC<PreferencesModalProps> = ({
               <div>
                 <div className="flex items-center justify-between mb-2">
                   <label className="text-[13px] font-bold uppercase tracking-wider" style={{ color: 'var(--text-muted)' }}>
-                    Swasti 🌸 Persona & Knowledge System Prompt
+                    Persona &amp; knowledge system prompt
                   </label>
                   <button
                     type="button"
@@ -415,7 +415,7 @@ export const PreferencesModal: React.FC<PreferencesModalProps> = ({
                     className="text-[13px] font-bold underline hover:opacity-80"
                     style={{ color: 'var(--c1)' }}
                   >
-                    Reset to Swasti 🌸 Default
+                    Reset to default
                   </button>
                 </div>
                 <textarea
@@ -438,7 +438,7 @@ export const PreferencesModal: React.FC<PreferencesModalProps> = ({
             <div className="space-y-4">
               <div>
                 <label className="block text-[13px] font-bold uppercase tracking-wider mb-2" style={{ color: 'var(--text-muted)' }}>
-                  Swasti 🌸 Voice (STT) Endpoint
+                  Speech-to-text (STT) endpoint
                 </label>
                 <input
                   type="text"
@@ -456,7 +456,7 @@ export const PreferencesModal: React.FC<PreferencesModalProps> = ({
 
               <div>
                 <label className="block text-[13px] font-bold uppercase tracking-wider mb-2" style={{ color: 'var(--text-muted)' }}>
-                  Swasti 🌸 Voice (TTS) Endpoint
+                  Text-to-speech (TTS) endpoint
                 </label>
                 <input
                   type="text"
@@ -487,7 +487,7 @@ export const PreferencesModal: React.FC<PreferencesModalProps> = ({
                     }}
                   >
                     {testingVoice && <RefreshCw className="w-4 h-4 animate-spin" />}
-                    <span>Test Swasti 🌸 Voice Server</span>
+                    <span>Test voice server</span>
                   </button>
                 </div>
 
@@ -508,7 +508,7 @@ export const PreferencesModal: React.FC<PreferencesModalProps> = ({
               {/* Swasti Voice Profiles */}
               <div>
                 <label className="block text-[13px] font-bold uppercase tracking-wider mb-2" style={{ color: 'var(--text-muted)' }}>
-                  Swasti 🌸 Voice Profile
+                  Voice profile
                 </label>
                 <select
                   value={voiceId}
@@ -550,7 +550,7 @@ export const PreferencesModal: React.FC<PreferencesModalProps> = ({
               {/* Toggles */}
               <div className="pt-3 border-t space-y-3.5" style={{ borderColor: 'var(--border-color)' }}>
                 <label className="flex items-center justify-between cursor-pointer">
-                  <span className="text-[14px] font-medium" style={{ color: 'var(--text-primary)' }}>Auto-read Swasti 🌸 responses aloud</span>
+                  <span className="text-[14px] font-medium" style={{ color: 'var(--text-primary)' }}>Auto-read responses aloud</span>
                   <input
                     type="checkbox"
                     checked={autoSpeak}
@@ -562,8 +562,8 @@ export const PreferencesModal: React.FC<PreferencesModalProps> = ({
 
                 <label className="flex items-center justify-between cursor-pointer">
                   <div>
-                    <span className="text-[14px] font-medium block" style={{ color: 'var(--text-primary)' }}>Voice Interruption</span>
-                    <span className="text-[12.5px]" style={{ color: 'var(--text-muted)' }}>Speaking will immediately pause Swasti 🌸 playback</span>
+                    <span className="text-[14px] font-medium block" style={{ color: 'var(--text-primary)' }}>Voice interruption</span>
+                    <span className="text-[12.5px]" style={{ color: 'var(--text-muted)' }}>Speaking immediately pauses playback</span>
                   </div>
                   <input
                     type="checkbox"
@@ -590,12 +590,11 @@ export const PreferencesModal: React.FC<PreferencesModalProps> = ({
                       key={m}
                       type="button"
                       onClick={() => setSelectedThemeMode(m)}
-                      className={`p-3.5 rounded-xl border flex flex-col items-center gap-2 transition-all font-bold text-[13.5px] ${
-                        selectedThemeMode === m ? 'ring-2' : 'hover:opacity-80'
-                      }`}
+                      className="p-3.5 rounded-xl border flex flex-col items-center gap-2 transition-all font-bold text-[13.5px] hover:opacity-85"
                       style={{
                         backgroundColor: 'var(--sidebar-bg)',
                         borderColor: selectedThemeMode === m ? 'var(--c1)' : 'var(--border-color)',
+                        boxShadow: selectedThemeMode === m ? '0 0 0 2px var(--c1)' : undefined,
                         color: 'var(--text-primary)'
                       }}
                     >
@@ -621,11 +620,12 @@ export const PreferencesModal: React.FC<PreferencesModalProps> = ({
                         key={pid}
                         onClick={() => setSelectedPalette(pid)}
                         className={`p-4 rounded-xl border cursor-pointer transition-all ${
-                          isSelected ? 'ring-2 shadow-md' : 'hover:opacity-90'
+                          isSelected ? 'shadow-md' : 'hover:opacity-90'
                         }`}
                         style={{
                           backgroundColor: 'var(--sidebar-bg)',
-                          borderColor: isSelected ? pal.c1.hex : 'var(--border-color)'
+                          borderColor: isSelected ? pal.c1.hex : 'var(--border-color)',
+                          boxShadow: isSelected ? `0 0 0 2px ${pal.c1.hex}` : undefined
                         }}
                       >
                         <div className="flex items-center justify-between mb-3">
@@ -647,7 +647,7 @@ export const PreferencesModal: React.FC<PreferencesModalProps> = ({
                         <div className="grid grid-cols-3 gap-2.5">
                           <div
                             className="p-3 rounded-lg text-[13px] font-bold flex flex-col justify-between h-18 shadow-sm border border-black/10"
-                            style={{ backgroundColor: pal.c1.hex, color: pid === 'mocha-rose' ? '#FFFFFF' : '#11121A' }}
+                            style={{ backgroundColor: pal.c1.hex, color: pid === 'mocha-rose' || pid === 'espresso-glass' || pid === 'teal-peach' ? '#FFFFFF' : '#11121A' }}
                           >
                             <span>{pal.c1.name}</span>
                             <span className="font-mono text-[11.5px] opacity-80">{pal.c1.hex}</span>
@@ -669,6 +669,31 @@ export const PreferencesModal: React.FC<PreferencesModalProps> = ({
                             <span className="font-mono text-[11.5px] opacity-80">{pal.c3.hex}</span>
                           </div>
                         </div>
+
+                {pal.isGlassy && (
+                          <div
+                            className="mt-3 relative h-14 rounded-xl overflow-hidden border border-white/30 shadow-inner"
+                            style={{
+                              background:
+                                'radial-gradient(40% 25% at 25% 0%, #3b2a1e, transparent), radial-gradient(40% 25% at 85% 0%, #4a3524, transparent), radial-gradient(35% 55% at 18% 40%, #b9a58d, transparent), radial-gradient(35% 50% at 82% 70%, #e0d1bf, transparent), radial-gradient(30% 45% at 50% 55%, #8c7a68, transparent), linear-gradient(180deg, #a89683, #d9cbbb)'
+                            }}
+                          >
+                            <div
+                              className="absolute inset-x-3 top-2.5 bottom-0 rounded-t-xl flex items-center justify-between px-3 text-[11.5px] font-bold"
+                              style={{
+                                background: 'linear-gradient(135deg, #ffffff45, #ffffff15)',
+                                WebkitBackdropFilter: 'blur(24px) saturate(1.2)',
+                                backdropFilter: 'blur(24px) saturate(1.2)',
+                                border: '1px solid #ffffff55',
+                                boxShadow: 'inset 0 1px 0 #ffffff80',
+                                color: '#241912'
+                              }}
+                            >
+                              <span>Frosted glass sheet preview</span>
+                              <span className="font-mono text-[10.5px] opacity-80">blur(28px)</span>
+                            </div>
+                          </div>
+                        )}
                       </div>
                     );
                   })}
@@ -678,13 +703,13 @@ export const PreferencesModal: React.FC<PreferencesModalProps> = ({
           )}
         </div>
 
-        {/* Footer with Developer Credit */}
-        <div className="px-6 py-4 border-t flex items-center justify-between" style={{ borderColor: 'var(--border-color)', backgroundColor: 'var(--sidebar-bg)' }}>
-          <p className="text-[13px] flex items-center gap-1.5 font-medium" style={{ color: 'var(--text-muted)' }}>
-            <span>Created by</span>
-            <strong className="font-bold" style={{ color: 'var(--c1)' }}>Bikash Talukder</strong>
-          </p>
-
+        <div
+          style={{
+            backgroundColor: 'var(--modal-bg, var(--sidebar-bg))',
+            borderColor: 'var(--border-color)'
+          }}
+          className="px-6 py-4 border-t flex items-center justify-end"
+        >
           <div className="flex items-center gap-3">
             <button
               type="button"
@@ -700,7 +725,7 @@ export const PreferencesModal: React.FC<PreferencesModalProps> = ({
               className="px-5 py-2 rounded-xl text-[13.5px] font-bold text-white shadow-md transition-all hover:scale-[1.02]"
               style={{ backgroundColor: 'var(--c1)' }}
             >
-              Save Preferences
+              Save preferences
             </button>
           </div>
         </div>

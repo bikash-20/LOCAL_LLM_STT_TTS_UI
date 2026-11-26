@@ -1,0 +1,114 @@
+:root {
+  /* Dark State Palette */
+  --lamp-bg-dark: #07060a;
+  --lamp-bg-dark-radial: #13111a;
+
+  /* Lit State Palette (Warm Umber & Amber) */
+  --lamp-bg-lit-core: #5a3a21;
+  --lamp-bg-lit-mid: #2c1c11;
+  --lamp-bg-lit-edge: #100a07;
+
+  /* 3D Lamp Materials & Lighting */
+  --lamp-shade-off: #1b1e26;
+  --lamp-shade-lit-top: #f3c885;
+  --lamp-shade-lit-mid: #ffe8ba;
+  --lamp-shade-lit-rim: #c9863b;
+  --lamp-pole: #1e2026;
+  --lamp-brass: #b88a44;
+  --lamp-brass-bright: #e0b36a;
+  --lamp-amber-glow: #ffae4d;
+  --lamp-cone-top: rgba(255, 206, 138, 0.28);
+  --lamp-cone-mid: rgba(212, 138, 62, 0.11);
+  --lamp-floor-glow: rgba(242, 169, 80, 0.22);
+
+  /* Pull Cord */
+  --lamp-cord: #c69a5c;
+  --lamp-cord-dark: #7a6345;
+  --lamp-bead: #e2b978;
+  --lamp-hint-dark: #756c63;
+  --lamp-hint-lit: #a98e73;
+
+  /* Login Glass Card */
+  --login-card-bg: rgba(18, 14, 12, 0.78);
+  --login-card-border: rgba(255, 214, 158, 0.14);
+  --login-card-border-lit: rgba(255, 198, 120, 0.22);
+  --login-card-shadow: 0 32px 80px -20px rgba(0, 0, 0, 0.85), inset 0 1px 0 rgba(255, 224, 180, 0.12);
+  --login-eyebrow: #c88b43;
+  --login-title: #f6efe6;
+  --login-subtitle: #e6d3ba;
+  --login-label: #9b8977;
+  --login-input-bg: rgba(11, 9, 9, 0.68);
+  --login-input-border: rgba(255, 224, 184, 0.11);
+  --login-input-border-focus: rgba(232, 160, 68, 0.65);
+  --login-input-text: #f3ebe0;
+  --login-placeholder: #62574d;
+  --login-checkbox-active: #e5983c;
+  --login-btn-grad: linear-gradient(135deg, #f8cb7e 0%, #e5973b 52%, #c97926 100%);
+  --login-btn-text: #1b1109;
+  --login-btn-shadow: 0 12px 30px -8px rgba(229, 151, 59, 0.55);
+  --login-muted: #7f7266;
+  --login-error: #f87171;
+}
+
+@keyframes lampCardShake {
+  0%, 100% {
+    transform: translateX(0);
+  }
+  18% {
+    transform: translateX(-8px);
+  }
+  36% {
+    transform: translateX(7px);
+  }
+  54% {
+    transform: translateX(-5px);
+  }
+  72% {
+    transform: translateX(4px);
+  }
+  90% {
+    transform: translateX(-2px);
+  }
+}
+
+.lamp-card-shake {
+  animation: lampCardShake 0.42s cubic-bezier(0.36, 0.07, 0.19, 0.97) both;
+}
+
+@keyframes dustFloat {
+  0% {
+    transform: translate3d(0, 0, 0) scale(0.9);
+    opacity: 0;
+  }
+  20% {
+    opacity: 0.7;
+  }
+  80% {
+    opacity: 0.55;
+  }
+  100% {
+    transform: translate3d(var(--dx, 14px), var(--dy, -46px), 0) scale(1.1);
+    opacity: 0;
+  }
+}
+
+.lamp-dust-mote {
+  animation: dustFloat var(--dur, 7s) ease-in-out var(--delay, 0s) infinite;
+}
+
+.lamp-login-input::placeholder {
+  color: var(--login-placeholder);
+  opacity: 1;
+}
+
+.lamp-login-input:focus {
+  border-color: var(--login-input-border-focus);
+  box-shadow: 0 0 0 3px rgba(232, 160, 68, 0.14);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .lamp-dust-mote,
+  .lamp-card-shake {
+    animation: none !important;
+  }
+}

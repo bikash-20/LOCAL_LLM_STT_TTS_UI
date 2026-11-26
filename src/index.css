@@ -20,10 +20,10 @@
     --c3: #E8412C; /* Action & Mic (Tomato Red) */
   }
 
-  /* Custom Scrollbar */
+  /* Custom Thin Scrollbar */
   ::-webkit-scrollbar {
-    width: 6px;
-    height: 6px;
+    width: 4px;
+    height: 4px;
   }
 
   ::-webkit-scrollbar-track {
@@ -31,12 +31,12 @@
   }
 
   ::-webkit-scrollbar-thumb {
-    background: rgba(120, 125, 150, 0.25);
+    background: rgba(120, 125, 150, 0.22);
     border-radius: 9999px;
   }
 
   ::-webkit-scrollbar-thumb:hover {
-    background: rgba(120, 125, 150, 0.45);
+    background: rgba(120, 125, 150, 0.42);
   }
 }
 
@@ -45,10 +45,70 @@ body {
   background-color: var(--app-bg);
   color: var(--text-primary);
   font-family: 'Plus Jakarta Sans', 'Urbanist', 'Outfit', 'Sora', -apple-system, sans-serif;
-  letter-spacing: -0.015em;
+  letter-spacing: normal;
+  word-spacing: normal;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
   transition: background-color 0.2s ease, color 0.2s ease;
+}
+
+input::placeholder,
+textarea::placeholder {
+  color: var(--text-muted);
+  opacity: 0.85;
+}
+
+/* Espresso Frosted Glass Theme Background & Surfaces */
+html.theme-glass body {
+  margin: 0;
+  min-height: 100vh;
+  position: relative;
+  isolation: isolate;
+  background:
+    radial-gradient(40% 18% at 25% 0%, #3b2a1e, transparent),
+    radial-gradient(40% 18% at 85% 0%, #4a3524, transparent),
+    radial-gradient(38% 45% at 18% 40%, #b9a58d, transparent),
+    radial-gradient(38% 42% at 82% 70%, #e0d1bf, transparent),
+    radial-gradient(34% 38% at 50% 55%, #8c7a68, transparent),
+    linear-gradient(180deg, #a89683, #d9cbbb);
+}
+
+html.theme-glass ::-webkit-scrollbar-thumb {
+  background: rgba(74, 53, 36, 0.24);
+}
+
+html.theme-glass ::-webkit-scrollbar-thumb:hover {
+  background: rgba(74, 53, 36, 0.45);
+}
+
+html.theme-glass.dark ::-webkit-scrollbar-thumb {
+  background: rgba(224, 209, 191, 0.24);
+}
+
+html.theme-glass .glass-sheet {
+  background: linear-gradient(135deg, rgba(255, 255, 255, 0.44), rgba(255, 255, 255, 0.16));
+  -webkit-backdrop-filter: blur(28px) saturate(1.25);
+  backdrop-filter: blur(28px) saturate(1.25);
+  border: 1px solid rgba(255, 255, 255, 0.48);
+  box-shadow: 0 20px 50px -20px rgba(59, 42, 30, 0.25), inset 0 1px 0 rgba(255, 255, 255, 0.7);
+}
+
+html.theme-glass.dark .glass-sheet {
+  background: linear-gradient(135deg, rgba(28, 19, 13, 0.72), rgba(18, 12, 8, 0.52));
+  -webkit-backdrop-filter: blur(28px) saturate(1.2);
+  backdrop-filter: blur(28px) saturate(1.2);
+  border: 1px solid rgba(255, 255, 255, 0.16);
+  box-shadow: 0 20px 50px -20px rgba(0, 0, 0, 0.45), inset 0 1px 0 rgba(255, 255, 255, 0.18);
+}
+
+.scroll-fade-y {
+  -webkit-mask-image: linear-gradient(to bottom, transparent 0%, black 14px, black calc(100% - 16px), transparent 100%);
+  mask-image: linear-gradient(to bottom, transparent 0%, black 14px, black calc(100% - 16px), transparent 100%);
+}
+
+.composer-box:focus-within {
+  border-color: var(--c1) !important;
+  box-shadow: 0 0 0 3px color-mix(in srgb, var(--c1) 25%, transparent), 0 12px 28px -12px rgba(0, 0, 0, 0.28);
 }
 
 

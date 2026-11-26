@@ -14,8 +14,8 @@ import {
   Sun,
   Download,
   PanelLeftClose,
-  Heart,
-  Sparkles
+  Sparkles,
+  LogOut
 } from 'lucide-react';
 
 interface SidebarProps {
@@ -28,6 +28,7 @@ interface SidebarProps {
   onExportSession: (session: ChatSession) => void;
   onOpenPreferences: () => void;
   onOpenVoiceMode: () => void;
+  onLogout: () => void;
   theme: ThemeMode;
   onToggleTheme: () => void;
   isOpen: boolean;
@@ -47,6 +48,7 @@ export const Sidebar: React.FC<SidebarProps> = ({
   onExportSession,
   onOpenPreferences,
   onOpenVoiceMode,
+  onLogout,
   theme,
   onToggleTheme,
   isOpen,
@@ -229,7 +231,7 @@ export const Sidebar: React.FC<SidebarProps> = ({
 
       {/* Sidebar Container with Smooth Width Collapse on Desktop & Mobile */}
       <aside
-        className={`fixed sm:relative top-0 bottom-0 left-0 z-40 border-r flex flex-col transition-all duration-300 ease-in-out select-none ${
+        className={`fixed sm:relative top-0 bottom-0 left-0 z-40 border-r flex flex-col transition-all duration-300 ease-in-out select-none backdrop-blur-md ${
           isOpen
             ? 'w-72 opacity-100 translate-x-0'
             : 'w-0 opacity-0 -translate-x-full sm:translate-x-0 border-r-0 pointer-events-none overflow-hidden'
@@ -256,11 +258,11 @@ export const Sidebar: React.FC<SidebarProps> = ({
                 </div>
                 <div>
                   <h1 className="text-lg font-black tracking-tight font-sans flex items-center gap-1.5" style={{ color: 'var(--text-primary)' }}>
-                    <span>Swasti 🌸</span>
+                    <span>Swasti</span>
                     <span className="w-2 h-2 rounded-full" style={{ backgroundColor: 'var(--c1)' }} />
                   </h1>
-                  <p className="text-[12px] font-semibold" style={{ color: 'var(--text-muted)' }}>
-                    Created by Bikash Talukder
+                  <p className="text-[12px] font-medium" style={{ color: 'var(--text-muted)' }}>
+                    Private voice &amp; chat
                   </p>
                 </div>
               </div>
@@ -349,54 +351,60 @@ export const Sidebar: React.FC<SidebarProps> = ({
                   }}
                 />
                 <span className="truncate text-[12.5px] font-bold" style={{ color: 'var(--text-secondary)' }}>
-                  Swasti 🌸 Online
+                  Swasti online
                 </span>
               </div>
 
               <button
                 onClick={onOpenVoiceMode}
-                className="p-1.5 px-3 rounded-lg border flex items-center gap-1.5 text-[12px] font-bold transition-all shadow-sm hover:scale-[1.02]"
+                className="p-1.5 px-3 rounded-lg border flex items-center gap-1.5 text-[12px] font-bold transition-all shadow-sm hover:opacity-85"
                 style={{
-                  backgroundColor: 'rgba(156, 175, 136, 0.15)',
-                  borderColor: 'var(--c1)',
-                  color: 'var(--c1)'
+                  backgroundColor: 'var(--card-bg)',
+                  borderColor: 'var(--border-color)',
+                  color: 'var(--text-primary)'
                 }}
-                title="Launch Swasti 🌸 Fullscreen Voice Mode"
+                title="Launch voice mode"
               >
-                <Mic className="w-3.5 h-3.5" style={{ color: 'var(--c3)' }} />
+                <Mic className="w-3.5 h-3.5" style={{ color: 'var(--c1)' }} />
                 <span>Voice</span>
               </button>
             </div>
           </div>
 
-          {/* Developer Credit Badge */}
-          <div className="px-4 py-2.5 border-t text-center" style={{ borderColor: 'var(--border-color)', backgroundColor: 'var(--sidebar-bg)' }}>
-            <p className="text-[12.5px] flex items-center justify-center gap-1.5 font-medium" style={{ color: 'var(--text-muted)' }}>
-              <span>Developed by</span>
-              <span className="font-extrabold font-sans" style={{ color: 'var(--c1)' }}>Bikash Talukder</span>
-              <Heart className="w-3 h-3 fill-current inline" style={{ color: 'var(--c3)' }} />
-            </p>
-          </div>
-
-          {/* Footer Settings & Theme */}
-          <div className="p-3 border-t flex items-center justify-between" style={{ borderColor: 'var(--border-color)', backgroundColor: 'var(--sidebar-bg)' }}>
+          {/* Footer Settings, Theme & Logout */}
+          <div className="p-3 border-t flex items-center justify-between gap-1" style={{ borderColor: 'var(--border-color)', backgroundColor: 'var(--sidebar-bg)' }}>
             <button
               onClick={onOpenPreferences}
-              className="flex items-center gap-2 px-3 py-1.5 rounded-lg text-[13.5px] font-bold transition-colors hover:opacity-80"
+              className="flex items-center gap-2 px-2.5 py-1.5 rounded-lg text-[13px] font-bold transition-colors hover:opacity-80"
               style={{ color: 'var(--text-secondary)' }}
             >
               <Settings className="w-4 h-4" />
               <span>Preferences</span>
             </button>
 
-            <button
-              onClick={onToggleTheme}
-              className="p-2 rounded-lg transition-colors hover:opacity-80"
-              style={{ color: 'var(--c1)' }}
-              title="Toggle Light / Dark theme"
-            >
-              {theme === 'dark' ? <Moon className="w-4 h-4" /> : <Sun className="w-4 h-4" />}
-            </button>
+            <div className="flex items-center gap-1">
+              <button
+                onClick={onToggleTheme}
+                className="p-2 rounded-lg transition-colors hover:opacity-80"
+                style={{ color: 'var(--c1)' }}
+                title="Toggle Light / Dark theme"
+              >
+                {theme === 'dark' ? <Moon className="w-4 h-4" /> : <Sun className="w-4 h-4" />}
+              </button>
+
+              <button
+                onClick={() => {
+                  onCloseMobile();
+                  onLogout();
+                }}
+                className="flex items-center gap-1.5 px-2.5 py-1.5 rounded-lg text-[13px] font-bold transition-colors hover:opacity-80"
+                style={{ color: 'var(--c3)' }}
+                title="Log out"
+              >
+                <LogOut className="w-4 h-4" />
+                <span>Log out</span>
+              </button>
+            </div>
           </div>
         </div>
       </aside>

@@ -17,8 +17,11 @@ import {
 import { getStoredPaletteId, saveStoredPaletteId, applyTheme } from './utils/themeManager';
 import { ColorPaletteId } from './types/theme';
 import { Message, ThemeMode } from './types';
+import { LampLoginGate } from './components/login/LampLoginGate';
+import { clearDemoSession, isDemoAuthenticated } from './components/login/authConfig';
 
 export function App() {
+  const [isAuthenticated, setIsAuthenticated] = useState(() => isDemoAuthenticated());
   const [theme, setTheme] = useState<ThemeMode>(() => getStoredTheme());
   const [paletteId, setPaletteId] = useState<ColorPaletteId>(() => getStoredPaletteId());
   const [ollamaConfig, setOllamaConfig] = useState(() => getStoredOllamaConfig());
@@ -178,6 +181,17 @@ export function App() {
     setTheme(prev => (prev === 'dark' ? 'light' : 'dark'));
   };
 
+  const handleLogout = useCallback(() => {
+    tts.stop();
+    ollama.stopGeneration();
+    clearDemoSession();
+    setIsAuthenticated(false);
+  }, [tts, ollama]);
+
+  if (!isAuthenticated) {
+    return <LampLoginGate onAuthenticated={() => setIsAuthenticated(true)} />;
+  }
+
   return (
     <div
       className="flex h-screen w-screen overflow-hidden"
@@ -194,6 +208,7 @@ export function App() {
         onExportSession={exportChatAsMarkdown}
         onOpenPreferences={() => setIsPreferencesOpen(true)}
         onOpenVoiceMode={() => setIsVoiceModeOpen(true)}
+        onLogout={handleLogout}
         theme={theme}
         onToggleTheme={handleToggleTheme}
         isOpen={isSidebarOpen}
@@ -231,11 +246,7 @@ export function App() {
           onToggleSidebar={() => setIsSidebarOpen(prev => !prev)}
           isSidebarOpen={isSidebarOpen}
           onExportChat={() => exportChatAsMarkdown(activeSession)}
-          onClearChat={() => {
-            if (window.confirm('Clear all messages in this conversation?')) {
-              clearAllSessions();
-            }
-          }}
+          onClearChat={clearAllSessions}
         />
       ) : (
         <div className="flex-1 flex items-center justify-center text-sm" style={{ color: 'var(--text-muted)' }}>

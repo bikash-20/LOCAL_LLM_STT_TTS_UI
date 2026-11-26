@@ -1,12 +1,14 @@
-export type ColorPaletteId = 'sage-tomato' | 'mocha-rose' | 'teal-peach';
+export type ColorPaletteId = 'sage-tomato' | 'mocha-rose' | 'teal-peach' | 'espresso-glass';
 
 export interface ColorPalette {
   id: ColorPaletteId;
   name: string;
   subtitle: string;
-  c1: { name: string; hex: string }; // Primary accent (Sage / Mocha / Teal)
-  c2: { name: string; hex: string }; // Base / Light background (Off-White / Soft Nude / Ice White)
-  c3: { name: string; hex: string }; // Action & Recording accent (Tomato / Rose Gold / Soft Peach)
+  isGlassy?: boolean;
+  metaThemeColor?: string;
+  c1: { name: string; hex: string }; // Primary accent (Sage / Mocha / Teal / Espresso)
+  c2: { name: string; hex: string }; // Base / Light background (Off-White / Soft Nude / Ice White / Warm Sand)
+  c3: { name: string; hex: string }; // Action & Recording accent (Tomato / Rose Gold / Soft Peach / Caramel)
   dark: {
     bg: string;
     sidebar: string;
@@ -128,6 +130,40 @@ export const COLOR_PALETTES: Record<ColorPaletteId, ColorPalette> = {
       textPrimary: '#0C2026',
       textSecondary: '#2B4A52',
       textMuted: '#5E7982'
+    }
+  },
+  'espresso-glass': {
+    id: 'espresso-glass',
+    name: 'Espresso Glass',
+    subtitle: 'Warm taupe & frosted glass sheet',
+    isGlassy: true,
+    metaThemeColor: '#3b2a1e',
+    c1: { name: 'Espresso', hex: '#4A3524' },
+    c2: { name: 'Warm Sand', hex: '#E0D1BF' },
+    c3: { name: 'Clay Terracotta', hex: '#B05B3B' },
+    dark: {
+      bg: 'transparent',
+      sidebar: 'rgba(24, 16, 11, 0.46)',
+      header: 'rgba(28, 19, 13, 0.42)',
+      card: 'rgba(34, 24, 17, 0.62)',
+      aiMsg: 'rgba(28, 19, 13, 0.34)',
+      border: 'rgba(255, 255, 255, 0.16)',
+      inputBg: 'rgba(32, 22, 16, 0.68)',
+      textPrimary: '#F7EFE6',
+      textSecondary: '#DFCFC0',
+      textMuted: '#B8A493'
+    },
+    light: {
+      bg: 'transparent',
+      sidebar: 'rgba(255, 255, 255, 0.26)',
+      header: 'rgba(255, 255, 255, 0.24)',
+      card: 'rgba(255, 255, 255, 0.48)',
+      aiMsg: 'rgba(255, 255, 255, 0.22)',
+      border: 'rgba(74, 53, 36, 0.16)',
+      inputBg: 'rgba(255, 255, 255, 0.46)',
+      textPrimary: '#1F150F',
+      textSecondary: '#3D2B1F',
+      textMuted: '#5B4636'
     }
   }
 };

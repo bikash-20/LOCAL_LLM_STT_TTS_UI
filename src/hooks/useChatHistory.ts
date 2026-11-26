@@ -25,7 +25,7 @@ export function useChatHistory() {
     if (sessions.length === 0) {
       const initialSession: ChatSession = {
         id: 'session-' + Date.now(),
-        title: 'New Conversation',
+        title: 'New conversation',
         createdAt: Date.now(),
         updatedAt: Date.now(),
         messages: []
@@ -42,7 +42,7 @@ export function useChatHistory() {
   const createNewSession = useCallback((title?: string) => {
     const newSession: ChatSession = {
       id: 'session-' + Date.now(),
-      title: title || 'New Conversation',
+      title: title || 'New conversation',
       createdAt: Date.now(),
       updatedAt: Date.now(),
       messages: []
@@ -75,7 +75,7 @@ export function useChatHistory() {
   const clearAllSessions = useCallback(() => {
     const freshSession: ChatSession = {
       id: 'session-' + Date.now(),
-      title: 'New Conversation',
+      title: 'New conversation',
       createdAt: Date.now(),
       updatedAt: Date.now(),
       messages: []

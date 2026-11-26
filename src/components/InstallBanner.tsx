@@ -63,7 +63,7 @@ export const InstallBanner: React.FC = () => {
           <div className="min-w-0">
             <div className="flex items-center gap-2 flex-wrap">
               <h3 className="font-extrabold text-[15px] sm:text-[16px] tracking-tight font-sans flex items-center gap-1.5" style={{ color: 'var(--text-primary)' }}>
-                <span>Install Swasti 🌸 AI</span>
+                <span>Install Swasti AI</span>
               </h3>
               <span
                 className="px-2 py-0.5 rounded-full text-[10.5px] font-extrabold uppercase border flex items-center gap-1"
@@ -80,7 +80,7 @@ export const InstallBanner: React.FC = () => {
 
             <p className="text-[12.5px] sm:text-[13px] font-medium leading-relaxed mt-0.5 line-clamp-2" style={{ color: 'var(--text-muted)' }}>
               {isIOS
-                ? 'Add Swasti 🌸 to your Home Screen for full-screen voice conversations and offline speed.'
+                ? 'Add Swasti to your Home Screen for full-screen voice conversations and offline speed.'
                 : 'Install as a native desktop or mobile app for instant offline launch, standalone window, and realistic voice chats.'}
             </p>
           </div>

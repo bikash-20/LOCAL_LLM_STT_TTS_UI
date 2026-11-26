@@ -32,6 +32,12 @@ export function applyTheme(paletteId: ColorPaletteId, mode: ThemeMode): void {
     root.classList.add('light');
   }
 
+  if (palette.isGlassy) {
+    root.classList.add('theme-glass');
+  } else {
+    root.classList.remove('theme-glass');
+  }
+
   const colors = effectiveMode === 'dark' ? palette.dark : palette.light;
 
   // Set CSS Variables
@@ -39,6 +45,14 @@ export function applyTheme(paletteId: ColorPaletteId, mode: ThemeMode): void {
   root.style.setProperty('--sidebar-bg', colors.sidebar);
   root.style.setProperty('--header-bg', colors.header);
   root.style.setProperty('--card-bg', colors.card);
+  root.style.setProperty(
+    '--modal-bg',
+    palette.isGlassy
+      ? effectiveMode === 'dark'
+        ? 'rgba(30, 21, 15, 0.90)'
+        : 'rgba(248, 243, 236, 0.90)'
+      : colors.card
+  );
   root.style.setProperty('--ai-msg-bg', colors.aiMsg);
   root.style.setProperty('--border-color', colors.border);
   root.style.setProperty('--input-bg', colors.inputBg);
@@ -54,6 +68,9 @@ export function applyTheme(paletteId: ColorPaletteId, mode: ThemeMode): void {
   // Meta theme color for mobile address bar
   const metaTheme = document.querySelector('meta[name="theme-color"]');
   if (metaTheme) {
-    metaTheme.setAttribute('content', colors.bg);
+    metaTheme.setAttribute(
+      'content',
+      palette.metaThemeColor || (colors.bg === 'transparent' ? palette.c1.hex : colors.bg)
+    );
   }
 }
