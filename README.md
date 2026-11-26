@@ -24,6 +24,8 @@
 ---
 
 ## 🌟 Overview
+<img width="1280" height="722" alt="image" src="https://github.com/user-attachments/assets/9da9f833-6dc7-40bb-ae2f-7dde1ac68079" />
+
 
 **Swasti 🌸** is designed from the ground up for individuals who demand complete privacy, uncompromising speed, and lifelike natural human voice interactions without sending a single byte of audio or chat data to external servers.
 
