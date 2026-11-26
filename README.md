@@ -1,4 +1,6 @@
 # Swasti 🌸 — 100% Private Offline AI Voice & Chat Companion
+![Uploading image.png…]()
+
 
 <div align="center">
 
